@@ -73,6 +73,13 @@ class WorkoutSessionCreate(BaseModel):
     exercises: List[SessionExercise]
 
 
+class UpdateExerciseRequest(BaseModel):
+    name: Optional[str] = None
+    sets: Optional[int] = None
+    reps: Optional[int] = None
+    current_load: Optional[str] = None
+
+
 class UpdateLoadRequest(BaseModel):
     load: str
 

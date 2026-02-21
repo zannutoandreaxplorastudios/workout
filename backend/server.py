@@ -98,7 +98,7 @@ SEED_DATA = [
         "name": "Giorno 2",
         "exercises": [
             {"name": "Panca 30\u00b0", "sets": 4, "reps": 8, "rest_time": "1'30''", "rest_seconds": 90, "current_load": "10", "muscle_group": "chest", "muscle_label": "Pettorali alti"},
-            {"name": "Leg extension", "sets": 4, "reps": 8, "rest_time": "1'30''", "rest_seconds": 90, "current_load": "55-50", "muscle_group": "quads", "muscle_label": "Quadricipiti"},
+            {"name": "Leg extension", "sets": 4, "reps": 8, "rest_time": "1'30''", "rest_seconds": 90, "current_load": "55", "muscle_group": "quads", "muscle_label": "Quadricipiti"},
             {"name": "Rouder mach", "sets": 4, "reps": 8, "rest_time": "1'30''", "rest_seconds": 90, "current_load": "30", "muscle_group": "back", "muscle_label": "Dorsali"},
             {"name": "Arnold press", "sets": 4, "reps": 8, "rest_time": "1'30''", "rest_seconds": 90, "current_load": "10", "muscle_group": "shoulders", "muscle_label": "Deltoidi"},
             {"name": "Face pull", "sets": 4, "reps": 10, "rest_time": "1'", "rest_seconds": 60, "current_load": "30", "muscle_group": "shoulders", "muscle_label": "Deltoidi post."},

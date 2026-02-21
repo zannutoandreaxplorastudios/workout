@@ -29,7 +29,7 @@ export default function HistoryDetail() {
   if (!session) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">Sessione non trovata</p>
+        <p className="text-muted-foreground">Sessione Non Trovata</p>
       </div>
     );
   }
@@ -93,7 +93,7 @@ export default function HistoryDetail() {
         {report.load_changes && report.load_changes.length > 0 && (
           <div className="mb-8">
             <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
-              Variazioni carichi
+              Variazioni Carichi
             </h3>
             <div className="space-y-2">
               {report.load_changes.map((change, i) => (
@@ -133,7 +133,7 @@ export default function HistoryDetail() {
         {/* Exercises */}
         <div>
           <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">
-            Esercizi eseguiti
+            Esercizi Eseguiti
           </h3>
           <div className="space-y-2">
             {session.exercises.map((ex, i) => (
@@ -150,7 +150,7 @@ export default function HistoryDetail() {
                 <MuscleIcon group={ex.muscle_group} size="sm" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium truncate">{ex.name}</span>
+                  <span className="text-sm font-medium truncate capitalize">{ex.name}</span>
                     {ex.was_modified && (
                       <span className="text-[9px] text-amber-500 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded-full">
                         MOD

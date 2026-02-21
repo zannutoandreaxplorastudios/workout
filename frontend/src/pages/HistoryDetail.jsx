@@ -172,12 +172,12 @@ export default function HistoryDetail() {
 
         <div className="mt-8">
           <Button
-            onClick={() => navigate("/history")}
+            onClick={() => navigate("/")}
             variant="outline"
             className="w-full h-12 rounded-2xl font-bold"
             data-testid="back-to-history-btn"
           >
-            Torna allo Storico
+            Torna Alla Dashboard
           </Button>
         </div>
       </div>

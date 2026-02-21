@@ -56,7 +56,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background pb-24" data-testid="dashboard">
       <div className="max-w-md mx-auto px-5 pt-14 pb-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-12">
+        <div className="flex items-center justify-between mb-14">
           <div>
             <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1.5">
               La Tua Scheda
@@ -67,7 +67,7 @@ export default function Dashboard() {
           </div>
           <button
             onClick={toggleTheme}
-            className="w-11 h-11 rounded-2xl bg-secondary/80 backdrop-blur-xl flex items-center justify-center transition-all active:scale-90"
+            className="w-11 h-11 rounded-2xl bg-secondary/80 card-blur flex items-center justify-center transition-all active:scale-90"
             data-testid="theme-toggle"
           >
             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
@@ -75,7 +75,7 @@ export default function Dashboard() {
         </div>
 
         {/* Day Cards */}
-        <div className="space-y-7">
+        <div className="space-y-8">
           {plans.map((plan, i) => {
             const isNext = plan.day_number === nextDay;
             const isExpanded = expandedDays.has(plan.day_number);
@@ -87,21 +87,21 @@ export default function Dashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1, duration: 0.4 }}
-                className={`relative rounded-3xl overflow-hidden border backdrop-blur-xl transition-all ${
+                className={`relative rounded-3xl overflow-hidden border card-blur transition-all ${
                   isNext
                     ? "bg-primary/5 border-primary/25 shadow-lg shadow-primary/10"
                     : "bg-card/60 border-border/40"
                 }`}
                 data-testid={`workout-day-card-${plan.day_number}`}
               >
-                {/* Card Header - Always Visible */}
+                {/* Card Header */}
                 <div
                   className="flex items-center justify-between p-5 cursor-pointer active:bg-secondary/20 transition-colors"
                   onClick={() => isNext ? navigate(`/workout/${plan.day_number}`) : toggleExpand(plan.day_number)}
                   data-testid={`day-header-${plan.day_number}`}
                 >
                   <div className="flex items-center gap-3">
-                    <h2 className="text-xl font-bold">{plan.name}</h2>
+                    <h2 className="text-xl font-bold capitalize">{plan.name}</h2>
                     {isNext && (
                       <Badge className="bg-primary text-primary-foreground text-[10px] font-bold rounded-full px-3 border-0">
                         Prossimo
@@ -123,7 +123,7 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                {/* Last completion info */}
+                {/* Last completion info - collapsed */}
                 {last && !isExpanded && !isNext && (
                   <div className="px-5 pb-4 -mt-1">
                     <p className="text-[11px] text-muted-foreground">
@@ -150,12 +150,12 @@ export default function Dashboard() {
                           </p>
                         </div>
                       )}
-                      <div className="px-5 pb-5 space-y-3">
+                      <div className="px-5 pb-5 space-y-3.5">
                         {plan.exercises.map((ex) => (
                           <div key={ex.id} className="flex items-center justify-between py-0.5">
                             <div className="flex items-center gap-3 min-w-0 flex-1">
                               <MuscleIcon group={ex.muscle_group} size="sm" />
-                              <span className="text-sm font-medium truncate">{ex.name}</span>
+                              <span className="text-sm font-medium truncate capitalize">{ex.name}</span>
                             </div>
                             <div className="flex items-center gap-3 shrink-0 ml-3">
                               {ex.reps > 0 ? (
@@ -172,7 +172,7 @@ export default function Dashboard() {
                         {isNext && (
                           <button
                             onClick={() => navigate(`/workout/${plan.day_number}`)}
-                            className="w-full mt-4 py-3.5 rounded-2xl bg-primary text-primary-foreground font-bold text-sm transition-all active:scale-[0.98]"
+                            className="w-full mt-5 py-3.5 rounded-2xl bg-primary text-primary-foreground font-bold text-sm transition-all active:scale-[0.98]"
                             data-testid="start-workout-btn"
                           >
                             Inizia Allenamento
@@ -189,8 +189,8 @@ export default function Dashboard() {
 
         {/* Storico Recente */}
         {sessions.length > 0 && (
-          <div className="mt-14">
-            <h2 className="text-xl font-bold mb-6" data-testid="history-section-title">
+          <div className="mt-16">
+            <h2 className="text-xl font-bold mb-7" data-testid="history-section-title">
               Storico Recente
             </h2>
             <div className="space-y-4">
@@ -203,7 +203,7 @@ export default function Dashboard() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04 }}
                     onClick={() => navigate(`/history/${s.id}`)}
-                    className={`rounded-2xl border-2 ${colors.border} ${colors.bg} backdrop-blur-xl p-4 cursor-pointer transition-all active:scale-[0.98]`}
+                    className={`rounded-2xl border-2 ${colors.border} ${colors.bg} card-blur p-4 cursor-pointer transition-all active:scale-[0.98]`}
                     data-testid={`home-history-${s.id}`}
                   >
                     <div className="flex items-center justify-between">

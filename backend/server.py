@@ -110,12 +110,13 @@ SEED_DATA = [
         "day_number": 3,
         "name": "Giorno 3",
         "exercises": [
-            {"name": "Panca piana man", "sets": 4, "reps": 12, "rest_time": "1'", "rest_seconds": 60, "current_load": "30+", "muscle_group": "chest", "muscle_label": "Pettorali"},
+            {"name": "Panca piana man", "sets": 4, "reps": 12, "rest_time": "1'", "rest_seconds": 60, "current_load": "30", "muscle_group": "chest", "muscle_label": "Pettorali"},
             {"name": "Leg curl", "sets": 4, "reps": 12, "rest_time": "1'", "rest_seconds": 60, "current_load": "40", "muscle_group": "hamstrings", "muscle_label": "Femorali"},
-            {"name": "Pulley", "sets": 4, "reps": 12, "rest_time": "1'", "rest_seconds": 60, "current_load": "30-35", "muscle_group": "back", "muscle_label": "Dorsali"},
-            {"name": "Alzate posteriori", "sets": 4, "reps": 15, "rest_time": "1'", "rest_seconds": 60, "current_load": "10-6", "muscle_group": "shoulders", "muscle_label": "Deltoidi post."},
+            {"name": "Pulley", "sets": 4, "reps": 12, "rest_time": "1'", "rest_seconds": 60, "current_load": "30", "muscle_group": "back", "muscle_label": "Dorsali"},
+            {"name": "Alzate posteriori", "sets": 4, "reps": 15, "rest_time": "1'", "rest_seconds": 60, "current_load": "10", "muscle_group": "shoulders", "muscle_label": "Deltoidi post."},
             {"name": "Push down triangolo", "sets": 4, "reps": 15, "rest_time": "1'", "rest_seconds": 60, "current_load": "25", "muscle_group": "triceps", "muscle_label": "Tricipiti"},
             {"name": "Curl 60\u00b0 man", "sets": 4, "reps": 15, "rest_time": "1'", "rest_seconds": 60, "current_load": "6", "muscle_group": "biceps", "muscle_label": "Bicipiti"},
+            {"name": "Addominali", "sets": 1, "reps": 0, "rest_time": "10'", "rest_seconds": 600, "current_load": "Corpo libero", "muscle_group": "abs", "muscle_label": "Addominali", "notes": "10 minuti"},
         ]
     }
 ]

@@ -42,9 +42,9 @@ export function ExerciseDetailSheet({ exercise, dayNumber, open, onClose, onLoad
       setLogs(updated);
       onLoadUpdated(exercise.id, newLoad);
       setNewLoad("");
-      toast.success("Carico aggiornato");
+      toast.success("Carico Aggiornato");
     } catch {
-      toast.error("Errore nell'aggiornamento");
+      toast.error("Errore Nell'Aggiornamento");
     }
     setSaving(false);
   };
@@ -65,7 +65,7 @@ export function ExerciseDetailSheet({ exercise, dayNumber, open, onClose, onLoad
 
           <div className="text-center py-6">
             <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">
-              Carico attuale
+              Carico Attuale
             </p>
             <p className="text-5xl font-black tracking-tighter text-primary" data-testid="current-load-display">
               {exercise.current_load}
@@ -127,7 +127,7 @@ export function ExerciseDetailSheet({ exercise, dayNumber, open, onClose, onLoad
           {logs.length > 0 && (
             <div className="mb-6">
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
-                Storico carichi
+                Storico Carichi
               </p>
               <div className="space-y-2">
                 {[...logs]
@@ -149,7 +149,7 @@ export function ExerciseDetailSheet({ exercise, dayNumber, open, onClose, onLoad
           {exercise.current_load !== "Corpo libero" && (
             <div>
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
-                Aggiorna carico
+                Aggiorna Carico
               </p>
               <div className="flex gap-3">
                 <Input

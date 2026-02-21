@@ -1,64 +1,65 @@
-# Gym Workout Tracker - PRD
+# Gym Workout Progress Tracker - PRD
 
-## Problem Statement
-App mobile-first per monitorare progressi in palestra. 3 giorni di workout pre-caricati con esercizi, serie, ripetizioni, tempi di recupero e carichi. Interfaccia iOS26-like minimal e moderna.
+## Problema Originale
+App responsive mobile per monitorare i progressi degli allenamenti in palestra. 3 giorni di allenamento, design iOS26-inspired, dark/light mode, nessun login.
 
-## Architecture
-- **Frontend**: React + Tailwind CSS + Shadcn UI + Framer Motion + Recharts
-- **Backend**: FastAPI + MongoDB (Motor async driver)
-- **Theme**: "Soft Performance" - Dark/Light mode with rose accent, Manrope font
+## Architettura
+- **Backend:** FastAPI + MongoDB (motor async)
+- **Frontend:** React + Tailwind CSS + shadcn/ui + Recharts + Framer Motion
+- **Font:** Manrope
+- **Colore Accento:** Arancione soft (HSL ~25 80% 55%)
 
-## User Persona
-- Single gym-goer who wants a clean, fast mobile interface to track workouts
-- Italian language interface
-- No authentication needed
+## Funzionalità Implementate
 
-## Core Requirements
-1. 3 workout days pre-loaded from user's gym plan
-2. Exercise checklist during workout sessions
-3. Weight/load progression tracking with charts
-4. Muscle group icons per exercise
-5. Workout history with dates, times, duration
-6. Session reports (volume, load changes %, time)
-7. Modify exercises for current session only
-8. Modify sets/reps/weight with full history
-9. Dark/Light mode toggle
+### MVP (Completato)
+- Dashboard con 3 giorni di allenamento
+- Schede allenamento comprimibili (giorno attivo espanso, altri compressi)
+- Badge "Prossimo" sul giorno corrente
+- Pagina allenamento attivo con checklist esercizi
+- Barra progresso allenamento
+- Modifica temporanea esercizi (nome, serie, reps, carico) per sessione
+- Modifica permanente esercizi con endpoint backend dedicato
+- Dettaglio esercizio con grafico progressione carichi (Recharts)
+- Aggiunta nuovo carico con storico
+- Completamento allenamento con report (volume, durata, variazioni carichi)
+- Storico allenamenti nella dashboard con bordi colorati per giorno
+- Pagina dettaglio sessione storica
+- Dark/Light mode con toggle
+- Icone SVG per gruppi muscolari (chest, back, quads, hamstrings, shoulders, triceps, biceps, abs)
 
-## What's Implemented (2026-02-21)
-- [x] Full backend API with all CRUD endpoints
-- [x] Auto-seeding of 3 workout days from user's gym plan
-- [x] Dashboard with 3 day cards, "PROSSIMO" badge, exercise previews
-- [x] Active Workout page with exercise checklist and progress bar
-- [x] Exercise Detail Sheet with load progression chart (Recharts AreaChart)
-- [x] Add new load permanently (updates plan + creates log entry)
-- [x] Edit Exercise Dialog (session-only modification)
-- [x] Complete Workout flow with duration input and auto-calculated report
-- [x] Post-workout report: volume, load changes with %, completion stats
-- [x] History page with chronological workout list
-- [x] History Detail with full session report
-- [x] Dark/Light mode toggle with localStorage persistence
-- [x] Muscle group color-coded icons (lucide-react)
-- [x] Bottom navigation (Home, Storico)
-- [x] Mobile-first responsive design (max-w-md)
-- [x] Framer Motion animations (card entry, stagger)
-- [x] Glassmorphism effects on sticky headers and bottom nav
+### Modifiche UI/Funzionali (Completate)
+- Colore accento arancione (sia light che dark mode)
+- Carichi come numeri singoli (rimossi "+", "-" dai seed data)
+- Esercizio "Addominali" aggiunto a tutti e 3 i giorni
+- Capitalizzazione testo in tutta l'app
+- Effetti blur/softness migliorati (glass, card-blur, glass-soft)
+- Spaziatura verticale aumentata tra componenti
+- Endpoint PUT per rinomina/modifica permanente esercizi
+- Navigazione HistoryDetail → Dashboard (non più /history)
 
-## Testing Results
-- Backend: 100% pass rate
-- Frontend: 95% pass rate (dev preview badge overlap only)
+## API Endpoints
+- `GET /api/workout-plans` - Lista piani
+- `GET /api/workout-plans/{day}` - Piano singolo
+- `PUT /api/workout-plans/{day}/exercises/{exId}` - Modifica esercizio (nome, sets, reps, load)
+- `PUT /api/workout-plans/{day}/exercises/{exId}/load` - Aggiorna carico
+- `POST /api/exercise-logs` - Crea log carico
+- `GET /api/exercise-logs/{exId}` - Storico carichi
+- `POST /api/workout-sessions` - Salva sessione
+- `GET /api/workout-sessions` - Lista sessioni
+- `GET /api/workout-sessions/{id}` - Dettaglio sessione
+- `GET /api/next-workout` - Prossimo allenamento
+- `POST /api/seed` - Reseed database
 
-## Prioritized Backlog
-### P1
-- Rest timer (user declined for now)
-- Export workout data (PDF/share)
+## DB Collections
+- `workout_plans`: Piani con esercizi per giorno
+- `exercise_logs`: Storico carichi per esercizio
+- `workout_sessions`: Sessioni completate con report
 
-### P2
-- Weekly/monthly stats dashboard
-- Personal records (PR) tracking
-- Exercise swap suggestions by muscle group
-- Multi-user support with auth
+## Testing
+- Backend: 17 pytest tests (100% pass)
+- Frontend: Tutti i flussi UI verificati
+- Test report: /app/test_reports/iteration_2.json
 
-### P3
-- Apple Health / Google Fit integration
-- Custom workout plan editor
-- Progressive overload suggestions (AI-powered)
+## Backlog
+- P2: Refactoring - rimozione History.jsx se funzionalità completamente migrata
+- P2: Ulteriori miglioramenti icone muscoli per esercizi specifici

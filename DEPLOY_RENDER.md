@@ -48,9 +48,12 @@ Questa app ha:
    - `DB_NAME` = nome del database (es. `workout`)
    - `CORS_ORIGINS` = URL frontend Render (es. `https://workout-frontend.onrender.com`)
 
-5. Avvia deploy.
+5. (Consigliato) in **Environment Variables** aggiungi anche:
+   - `PYTHON_VERSION=3.11.9`
 
-6. Quando è online, verifica health endpoint:
+6. Avvia deploy.
+
+7. Quando è online, verifica health endpoint:
    - `GET https://<tuo-backend>.onrender.com/api/`
 
 Dovresti vedere:
@@ -106,6 +109,11 @@ Poi fai **Manual Deploy** del backend per applicare la variabile aggiornata.
 ### Errore CORS nel browser
 - Controlla `CORS_ORIGINS` nel backend.
 - Deve combaciare esattamente con l’origin frontend (`https://...onrender.com`).
+
+### Build backend fallisce su `requirements.txt`
+- Se vedi errori tipo `No matching distribution found for emergentintegrations==0.1.0`, significa che nel file requirements c'è una dipendenza non pubblica/non necessaria in produzione.
+- Usa un `backend/requirements.txt` minimale con le dipendenze realmente usate dal server (`fastapi`, `uvicorn`, `python-dotenv`, `motor`, `pydantic`).
+- Rifai deploy dopo commit/push.
 
 ### 500 dal backend su query DB
 - Verifica `MONGO_URL` e `DB_NAME`.

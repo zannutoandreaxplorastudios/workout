@@ -19,6 +19,8 @@ export const api = {
   getWorkoutSession: (id) => client.get(`/workout-sessions/${id}`).then((r) => r.data),
   getNextWorkout: () => client.get("/next-workout").then((r) => r.data),
   seed: () => client.post("/seed").then((r) => r.data),
+  updateExercise: (day, exId, data) =>
+    client.put(`/workout-plans/${day}/exercises/${exId}`, data).then((r) => r.data),
 };
 
 export const parseLoad = (load) => {

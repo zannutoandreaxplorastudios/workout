@@ -210,6 +210,7 @@ export default function ActiveWorkout() {
       {/* Edit Exercise */}
       <EditExerciseDialog
         exercise={editingExercise}
+        dayNumber={parseInt(dayNumber)}
         open={!!editingExercise}
         onClose={() => setEditingExercise(null)}
         onSave={(exId, updates) => {

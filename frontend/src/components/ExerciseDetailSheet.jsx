@@ -57,7 +57,7 @@ export function ExerciseDetailSheet({ exercise, dayNumber, open, onClose, onLoad
             <div className="flex items-center gap-3">
               <MuscleIcon group={exercise.muscle_group} size="lg" />
               <div>
-                <DrawerTitle className="text-xl font-bold text-left">{exercise.name}</DrawerTitle>
+                <DrawerTitle className="text-xl font-bold text-left capitalize">{exercise.name}</DrawerTitle>
                 <DrawerDescription className="text-left">{exercise.muscle_label}</DrawerDescription>
               </div>
             </div>

@@ -1,65 +1,90 @@
 # Gym Workout Progress Tracker - PRD
 
-## Problema Originale
-App responsive mobile per monitorare i progressi degli allenamenti in palestra. 3 giorni di allenamento, design iOS26-inspired, dark/light mode, nessun login.
+## Original Problem Statement
+App responsive mobile per monitorare i progressi degli allenamenti in palestra con supporto multi-utente.
 
-## Architettura
+## Architecture
 - **Backend:** FastAPI + MongoDB (motor async)
 - **Frontend:** React + Tailwind CSS + shadcn/ui + Recharts + Framer Motion
 - **Font:** Manrope
-- **Colore Accento:** Arancione soft (HSL ~25 80% 55%)
+- **Accent Color:** Soft Orange (HSL ~25 90% 60%)
+- **Language:** English (all UI)
+- **Auth:** Simple profile selection (no passwords)
 
-## Funzionalità Implementate
+## Users
+- Andrea (amber #F59E0B)
+- Roy (blue #3B82F6)
+- Romi (green #10B981)
 
-### MVP (Completato)
-- Dashboard con 3 giorni di allenamento
-- Schede allenamento comprimibili (giorno attivo espanso, altri compressi)
-- Badge "Prossimo" sul giorno corrente
-- Pagina allenamento attivo con checklist esercizi
-- Barra progresso allenamento
-- Modifica temporanea esercizi (nome, serie, reps, carico) per sessione
-- Modifica permanente esercizi con endpoint backend dedicato
-- Dettaglio esercizio con grafico progressione carichi (Recharts)
-- Aggiunta nuovo carico con storico
-- Completamento allenamento con report (volume, durata, variazioni carichi)
-- Storico allenamenti nella dashboard con bordi colorati per giorno
-- Pagina dettaglio sessione storica
-- Dark/Light mode con toggle
-- Icone SVG per gruppi muscolari (chest, back, quads, hamstrings, shoulders, triceps, biceps, abs)
+## Features Implemented
 
-### Modifiche UI/Funzionali (Completate)
-- Colore accento arancione (sia light che dark mode)
-- Carichi come numeri singoli (rimossi "+", "-" dai seed data)
-- Esercizio "Addominali" aggiunto a tutti e 3 i giorni
-- Capitalizzazione testo in tutta l'app
-- Effetti blur/softness migliorati (glass, card-blur, glass-soft)
-- Spaziatura verticale aumentata tra componenti
-- Endpoint PUT per rinomina/modifica permanente esercizi
-- Navigazione HistoryDetail → Dashboard (non più /history)
+### Multi-User System (Feb 21, 2026)
+- Profile selection screen with 3 users (Andrea, Roy, Romi)
+- Each user has fully independent data (workout plans, exercise logs, sessions)
+- Profile persisted in localStorage
+- Profile switch via avatar button in dashboard header
+- All API endpoints scoped by `user_id` query parameter
 
-## API Endpoints
-- `GET /api/workout-plans` - Lista piani
-- `GET /api/workout-plans/{day}` - Piano singolo
-- `PUT /api/workout-plans/{day}/exercises/{exId}` - Modifica esercizio (nome, sets, reps, load)
-- `PUT /api/workout-plans/{day}/exercises/{exId}/load` - Aggiorna carico
-- `POST /api/exercise-logs` - Crea log carico
-- `GET /api/exercise-logs/{exId}` - Storico carichi
-- `POST /api/workout-sessions` - Salva sessione
-- `GET /api/workout-sessions` - Lista sessioni
-- `GET /api/workout-sessions/{id}` - Dettaglio sessione
-- `GET /api/next-workout` - Prossimo allenamento
+### Workout Management
+- 3-day workout program (expandable to max 4 days)
+- Collapsible day cards (next day expanded, others collapsed)
+- "Next" badge on current workout day
+- Add new workout day (dialog with name input)
+- Delete workout day (with confirmation)
+
+### Exercise Tracking
+- Exercise checklist with completion toggle
+- Add exercise to a day (with name, sets, reps, load, muscle group)
+- Delete exercise from a day
+- Edit exercise (temporary session-only or permanent save)
+- Muscle group selector dropdown
+- Exercise detail sheet with load progression chart (Recharts)
+- Load history with ability to add new loads
+
+### Workout Sessions & History
+- Complete workout with duration input
+- Post-workout report (volume, duration, load changes %)
+- Recent history on dashboard with colored borders per day
+- Full history page with all completed sessions
+- History detail page with stats and exercises performed
+
+### UI/UX
+- Dark/Light mode toggle
+- Orange accent color
+- Blur/softness effects (glass, card-blur, glass-soft)
+- SVG muscle group icons (chest, back, quads, hamstrings, shoulders, triceps, biceps, abs)
+- Bottom navigation (Home, History)
+- Capitalize text across the app
+
+## API Endpoints (all require `?user_id=xxx`)
+- `GET /api/profiles` - List profiles (no user_id needed)
+- `GET /api/workout-plans` - User's plans
+- `GET /api/workout-plans/{day}` - Single plan
+- `POST /api/workout-plans` - Create day (max 4)
+- `DELETE /api/workout-plans/{day}` - Delete day
+- `PUT /api/workout-plans/{day}/exercises/{exId}` - Update exercise
+- `POST /api/workout-plans/{day}/exercises` - Add exercise
+- `DELETE /api/workout-plans/{day}/exercises/{exId}` - Delete exercise
+- `PUT /api/workout-plans/{day}/exercises/{exId}/load` - Update load
+- `POST /api/exercise-logs` - Create log
+- `GET /api/exercise-logs/{exId}` - Load history
+- `POST /api/workout-sessions` - Save session
+- `GET /api/workout-sessions` - List sessions
+- `GET /api/workout-sessions/{id}` - Session detail
+- `GET /api/next-workout` - Next workout info
 - `POST /api/seed` - Reseed database
 
 ## DB Collections
-- `workout_plans`: Piani con esercizi per giorno
-- `exercise_logs`: Storico carichi per esercizio
-- `workout_sessions`: Sessioni completate con report
+- `workout_plans`: {user_id, day_number, name, exercises[]}
+- `exercise_logs`: {user_id, exercise_id, exercise_name, load, date}
+- `workout_sessions`: {user_id, day_number, day_name, completed_at, duration_minutes, exercises[], report}
 
 ## Testing
-- Backend: 17 pytest tests (100% pass)
-- Frontend: Tutti i flussi UI verificati
-- Test report: /app/test_reports/iteration_2.json
+- Backend: 22 pytest tests (100% pass)
+- Frontend: All UI flows verified
+- Test reports: /app/test_reports/iteration_3.json
 
 ## Backlog
-- P2: Refactoring - rimozione History.jsx se funzionalità completamente migrata
-- P2: Ulteriori miglioramenti icone muscoli per esercizi specifici
+- P2: Refactoring - remove History.jsx if fully migrated to Dashboard
+- P2: Weekly summary chart on dashboard
+- P3: Export/import workout data

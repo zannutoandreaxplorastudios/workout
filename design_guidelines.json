@@ -1,0 +1,206 @@
+{
+  "identity": {
+    "name": "E1 - The Anti-AI Designer",
+    "persona": "Creative Designer who blends 'Performance Pro' with 'Soft Utility'. Prioritizes emotion, content, and negative space over generic trends.",
+    "principles": [
+      "Fusion over Imitation: Mix IOS softness with high-performance data density.",
+      "Emotion First: The app should feel 'encouraging' and 'effortless'.",
+      "Content is King: Data (weights, reps) is the hero. Everything else is support.",
+      "Zoom In: Focus on the current set. Everything else blurs away.",
+      "Negative Space: Use whitespace to reduce cognitive load during heavy lifts."
+    ],
+    "anti_patterns": [
+      "No generic 'Inter' for headings. Use 'Manrope' for character.",
+      "No center-everything. Use asymmetry for interest.",
+      "No heavy gradients. Use soft, diffuse light.",
+      "No jagged charts. Use smooth curves with gradients.",
+      "No 'Confirm' modals for every action. Make it fluid."
+    ]
+  },
+  "typography": {
+    "primary_font": {
+      "name": "Manrope",
+      "usage": "Headings, Data Values, Buttons",
+      "weights": ["500", "700", "800"],
+      "import_url": "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap"
+    },
+    "secondary_font": {
+      "name": "Inter",
+      "usage": "Body Text, Labels, Lists",
+      "weights": ["400", "500"],
+      "import_url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+    },
+    "scale": {
+      "h1": "text-4xl md:text-5xl font-extrabold tracking-tight",
+      "h2": "text-2xl md:text-3xl font-bold tracking-tight",
+      "h3": "text-xl font-bold",
+      "body": "text-base font-medium leading-relaxed",
+      "label": "text-xs uppercase tracking-widest font-bold text-muted-foreground",
+      "data_large": "text-5xl font-black tracking-tighter"
+    }
+  },
+  "colors": {
+    "theme_strategy": "Soft Performance (Light/Dark Toggle)",
+    "light": {
+      "background": "#FDFBF7",
+      "foreground": "#1C1917",
+      "card": "#FFFFFF",
+      "card_foreground": "#1C1917",
+      "primary": "#F43F5E",
+      "primary_foreground": "#FFFFFF",
+      "secondary": "#E7E5E4",
+      "secondary_foreground": "#1C1917",
+      "muted": "#F5F5F4",
+      "muted_foreground": "#78716C",
+      "accent": "#FFE4E6",
+      "accent_foreground": "#F43F5E",
+      "destructive": "#EF4444",
+      "border": "#E7E5E4",
+      "input": "#E7E5E4",
+      "ring": "#F43F5E"
+    },
+    "dark": {
+      "background": "#0C0A09",
+      "foreground": "#FAFAF9",
+      "card": "#1C1917",
+      "card_foreground": "#FAFAF9",
+      "primary": "#FB7185",
+      "primary_foreground": "#0C0A09",
+      "secondary": "#292524",
+      "secondary_foreground": "#FAFAF9",
+      "muted": "#292524",
+      "muted_foreground": "#A8A29E",
+      "accent": "#881337",
+      "accent_foreground": "#FAFAF9",
+      "destructive": "#7F1D1D",
+      "border": "#292524",
+      "input": "#292524",
+      "ring": "#FB7185"
+    },
+    "charts": {
+      "chart_1": "#F43F5E",
+      "chart_2": "#F97316",
+      "chart_3": "#14B8A6",
+      "chart_4": "#8B5CF6",
+      "chart_5": "#EC4899"
+    }
+  },
+  "layout_strategy": {
+    "type": "Mobile-First 'Bento' Stack",
+    "grid_system": "grid-cols-1 md:grid-cols-12 gap-4 md:gap-8",
+    "container": "max-w-md mx-auto md:max-w-4xl px-4 md:px-8 py-6",
+    "spacing": {
+      "section_gap": "gap-8",
+      "card_padding": "p-6",
+      "internal_padding": "p-4"
+    },
+    "border_radius": {
+      "card": "rounded-3xl",
+      "button": "rounded-full",
+      "input": "rounded-2xl"
+    },
+    "shadows": {
+      "card": "shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none",
+      "float": "shadow-[0_20px_50px_rgb(0,0,0,0.1)]",
+      "inner": "shadow-inner"
+    }
+  },
+  "components": {
+    "Button": {
+      "path": "@/components/ui/button",
+      "style": "rounded-full font-bold tracking-wide transition-all active:scale-95",
+      "variants": {
+        "default": "bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:bg-primary/90",
+        "outline": "border-2 border-primary/20 bg-transparent hover:bg-primary/5 text-foreground",
+        "ghost": "hover:bg-accent hover:text-accent-foreground",
+        "soft": "bg-primary/10 text-primary hover:bg-primary/20"
+      }
+    },
+    "Card": {
+      "path": "@/components/ui/card",
+      "style": "rounded-3xl border-0 shadow-card bg-card/80 backdrop-blur-xl transition-all"
+    },
+    "Input": {
+      "path": "@/components/ui/input",
+      "style": "rounded-2xl border-transparent bg-secondary/50 focus:bg-background focus:ring-2 focus:ring-primary/20 transition-all text-lg font-medium placeholder:text-muted-foreground/50"
+    },
+    "Chart": {
+      "library": "recharts",
+      "style": "Use AreaChart with <defs> for gradients. StrokeWidth={3}. Dot={false}. Tooltip with custom rounded content."
+    },
+    "Tabs": {
+      "path": "@/components/ui/tabs",
+      "style": "bg-secondary/30 rounded-full p-1",
+      "trigger_style": "rounded-full data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary font-bold"
+    },
+    "MuscleIcon": {
+      "library": "lucide-react + react-icons/gi",
+      "mapping": {
+        "chest": "GiChestArmor",
+        "back": "GiBackPain",
+        "legs": "GiLegArmor",
+        "arms": "GiBiceps",
+        "shoulders": "GiShoulderArmor",
+        "cardio": "GiRunningShoe",
+        "abs": "GiAbdominalArmor",
+        "default": "Dumbbell"
+      }
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": "backdrop-blur-xl bg-white/70 dark:bg-black/60 border border-white/20",
+    "gradients": "bg-gradient-to-br from-primary/20 to-transparent",
+    "noise": "opacity-20 mix-blend-overlay pointer-events-none fixed inset-0 z-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]",
+    "animations": {
+      "page_transition": "initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3, ease: 'easeOut' }}",
+      "stagger": "variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } }}",
+      "tap": "whileTap={{ scale: 0.95 }}"
+    }
+  },
+  "media": {
+    "image_urls": {
+      "day_1_bg": {
+        "url": "https://images.unsplash.com/photo-1767473907132-662a3abce2e5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHw0fHxzb2Z0JTIwYWJzdHJhY3QlMjAzZCUyMHNoYXBlcyUyMHBhc3RlbCUyMGdyYWRpZW50JTIwbWluaW1hbGlzdHxlbnwwfHx8fDE3NzE2NzE3NjR8MA&ixlib=rb-4.1.0&q=85",
+        "desc": "Abstract geometric shapes for Day 1 Card",
+        "category": "card_bg"
+      },
+      "day_2_bg": {
+        "url": "https://images.unsplash.com/photo-1758812098293-17e75100b0a2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwzfHxzb2Z0JTIwYWJzdHJhY3QlMjAzZCUyMHNoYXBlcyUyMHBhc3RlbCUyMGdyYWRpZW50JTIwbWluaW1hbGlzdHxlbnwwfHx8fDE3NzE2NzE3NjR8MA&ixlib=rb-4.1.0&q=85",
+        "desc": "Abstract pastel shapes for Day 2 Card",
+        "category": "card_bg"
+      },
+      "day_3_bg": {
+        "url": "https://images.unsplash.com/photo-1763615445633-c05153e7d1a7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwxfHxzb2Z0JTIwYWJzdHJhY3QlMjAzZCUyMHNoYXBlcyUyMHBhc3RlbCUyMGdyYWRpZW50JTIwbWluaW1hbGlzdHxlbnwwfHx8fDE3NzE2NzE3NjR8MA&ixlib=rb-4.1.0&q=85",
+        "desc": "Colorful abstract sun for Day 3 Card",
+        "category": "card_bg"
+      },
+      "empty_state": {
+        "url": "https://images.unsplash.com/photo-1762652345565-e38e420b6f30?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwyfHxzb2Z0JTIwYWJzdHJhY3QlMjAzZCUyMHNoYXBlcyUyMHBhc3RlbCUyMGdyYWRpZW50JTIwbWluaW1hbGlzdHxlbnwwfHx8fDE3NzE2NzE3NjR8MA&ixlib=rb-4.1.0&q=85",
+        "desc": "Soft spheres for empty states or hero",
+        "category": "illustration"
+      }
+    }
+  },
+  "instructions_to_main_agent": [
+    "1. THEME: Implement the 'Soft Performance' theme. Use 'Manrope' for all headings and data. This is non-negotiable.",
+    "2. NO AUTH: The app must start directly on the Dashboard. No login, no signup. Store a 'default_user_id' in local storage if needed for API.",
+    "3. MOBILE FIRST: The layout must be optimized for touch. Buttons min-height 48px. Inputs min-height 50px.",
+    "4. SOFT CHARTS: Use 'Recharts' AreaChart. Add a <defs> linearGradient to fill the area with opacity. Stroke width 3px.",
+    "5. DATA-TESTID: Every button, input, and card MUST have a data-testid attribute (e.g., 'workout-day-card-1').",
+    "6. ICONS: Use 'lucide-react' for general UI. Use 'react-icons/gi' for specific muscles if needed. If 'Gi' icons feel too 'gamey', fallback to generic 'lucide-react' icons but styled with 'text-primary'.",
+    "7. PRE-LOADED DATA: Seed the database or state with 3 days of workout data (Push, Pull, Legs or similar).",
+    "8. ANIMATIONS: Use 'framer-motion' for page transitions and list staggering. It makes the app feel native.",
+    "9. TABS: Use a bottom navigation bar for mobile (Home, History, Settings).",
+    "10. CARD STYLING: Do not use default Shadcn cards. Add 'rounded-3xl' and 'border-0' and 'shadow-sm' to them."
+  ],
+  "universal_guidelines": [
+    "You tend to converge toward generic, 'on distribution' outputs. Avoid this.",
+    "Don't make generic centered layouts. Use asymmetry.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "Every interaction needs micro-animations - hover states, transitions.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "Subtle grain textures separates good from extraordinary.",
+    "Use 'sonner' for toasts.",
+    "Components MUST use named exports."
+  ]
+}

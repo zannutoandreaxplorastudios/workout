@@ -8,32 +8,39 @@ const client = axios.create({
 });
 
 export const api = {
-  getWorkoutPlans: () => client.get("/workout-plans").then((r) => r.data),
-  getWorkoutPlan: (day) => client.get(`/workout-plans/${day}`).then((r) => r.data),
-  updateExerciseLoad: (day, exId, load) =>
-    client.put(`/workout-plans/${day}/exercises/${exId}/load`, { load }).then((r) => r.data),
-  getExerciseLogs: (exId) => client.get(`/exercise-logs/${exId}`).then((r) => r.data),
-  createExerciseLog: (data) => client.post("/exercise-logs", data).then((r) => r.data),
-  createWorkoutSession: (data) => client.post("/workout-sessions", data).then((r) => r.data),
-  getWorkoutSessions: () => client.get("/workout-sessions").then((r) => r.data),
-  getWorkoutSession: (id) => client.get(`/workout-sessions/${id}`).then((r) => r.data),
-  getNextWorkout: () => client.get("/next-workout").then((r) => r.data),
+  getProfiles: () => client.get("/profiles").then((r) => r.data),
+  getWorkoutPlans: (userId) => client.get(`/workout-plans?user_id=${userId}`).then((r) => r.data),
+  getWorkoutPlan: (day, userId) => client.get(`/workout-plans/${day}?user_id=${userId}`).then((r) => r.data),
+  createWorkoutDay: (userId, data) => client.post(`/workout-plans?user_id=${userId}`, data || {}).then((r) => r.data),
+  deleteWorkoutDay: (day, userId) => client.delete(`/workout-plans/${day}?user_id=${userId}`).then((r) => r.data),
+  updateExercise: (day, exId, data, userId) =>
+    client.put(`/workout-plans/${day}/exercises/${exId}?user_id=${userId}`, data).then((r) => r.data),
+  addExercise: (day, data, userId) =>
+    client.post(`/workout-plans/${day}/exercises?user_id=${userId}`, data).then((r) => r.data),
+  deleteExercise: (day, exId, userId) =>
+    client.delete(`/workout-plans/${day}/exercises/${exId}?user_id=${userId}`).then((r) => r.data),
+  updateExerciseLoad: (day, exId, load, userId) =>
+    client.put(`/workout-plans/${day}/exercises/${exId}/load?user_id=${userId}`, { load }).then((r) => r.data),
+  getExerciseLogs: (exId, userId) => client.get(`/exercise-logs/${exId}?user_id=${userId}`).then((r) => r.data),
+  createExerciseLog: (data, userId) => client.post(`/exercise-logs?user_id=${userId}`, data).then((r) => r.data),
+  createWorkoutSession: (data, userId) => client.post(`/workout-sessions?user_id=${userId}`, data).then((r) => r.data),
+  getWorkoutSessions: (userId) => client.get(`/workout-sessions?user_id=${userId}`).then((r) => r.data),
+  getWorkoutSession: (id, userId) => client.get(`/workout-sessions/${id}?user_id=${userId}`).then((r) => r.data),
+  getNextWorkout: (userId) => client.get(`/next-workout?user_id=${userId}`).then((r) => r.data),
   seed: () => client.post("/seed").then((r) => r.data),
-  updateExercise: (day, exId, data) =>
-    client.put(`/workout-plans/${day}/exercises/${exId}`, data).then((r) => r.data),
 };
 
 export const parseLoad = (load) => {
-  if (!load || load === "Corpo libero") return 0;
+  if (!load || load === "Bodyweight") return 0;
   const match = String(load).match(/(\d+)/);
   return match ? parseInt(match[1]) : 0;
 };
 
 export const formatDate = (iso) =>
-  new Date(iso).toLocaleDateString("it-IT", { day: "2-digit", month: "2-digit", year: "numeric" });
+  new Date(iso).toLocaleDateString("en-US", { day: "2-digit", month: "short", year: "numeric" });
 
 export const formatTime = (iso) =>
-  new Date(iso).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
+  new Date(iso).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
 
 export const formatShortDate = (iso) =>
-  new Date(iso).toLocaleDateString("it-IT", { day: "2-digit", month: "short" });
+  new Date(iso).toLocaleDateString("en-US", { day: "2-digit", month: "short" });

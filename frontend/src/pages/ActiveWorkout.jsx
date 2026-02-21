@@ -66,12 +66,12 @@ export default function ActiveWorkout() {
   return (
     <div className="min-h-screen bg-background pb-32" data-testid="active-workout">
       {/* Sticky Header */}
-      <div className="sticky top-0 z-40 glass bg-background/80 border-b border-border/30">
+      <div className="sticky top-0 z-40 glass-soft bg-background/70 border-b border-border/20">
         <div className="max-w-md mx-auto px-5 pt-14 pb-4">
           <div className="flex items-center gap-3 mb-4">
             <button
               onClick={() => navigate("/")}
-              className="w-10 h-10 rounded-2xl bg-secondary flex items-center justify-center transition-all active:scale-90"
+              className="w-10 h-10 rounded-2xl bg-secondary/80 card-blur flex items-center justify-center transition-all active:scale-90"
               data-testid="back-button"
             >
               <ArrowLeft size={18} />
@@ -80,7 +80,7 @@ export default function ActiveWorkout() {
               <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">
                 Allenamento
               </p>
-              <h1 className="text-2xl font-bold" data-testid="workout-title">
+              <h1 className="text-2xl font-bold capitalize" data-testid="workout-title">
                 {plan?.name}
               </h1>
             </div>
@@ -95,7 +95,7 @@ export default function ActiveWorkout() {
       </div>
 
       {/* Exercise List */}
-      <div className="max-w-md mx-auto px-5 pt-5 space-y-3">
+      <div className="max-w-md mx-auto px-5 pt-6 space-y-4">
         {exercises.map((ex, i) => {
           const isDone = completed.has(ex.id);
           return (
@@ -104,10 +104,10 @@ export default function ActiveWorkout() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className={`rounded-2xl border p-4 transition-all ${
+              className={`rounded-2xl border p-4 card-blur transition-all ${
                 isDone
-                  ? "bg-secondary/30 border-border/30 opacity-60"
-                  : "bg-card border-border/50"
+                  ? "bg-secondary/30 border-border/20 opacity-60"
+                  : "bg-card/80 border-border/40"
               }`}
               data-testid={`exercise-card-${ex.id}`}
             >
@@ -128,7 +128,7 @@ export default function ActiveWorkout() {
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <MuscleIcon group={ex.muscle_group} size="sm" />
-                    <span className={`font-bold text-sm truncate ${isDone ? "line-through" : ""}`}>
+                    <span className={`font-bold text-sm truncate capitalize ${isDone ? "line-through" : ""}`}>
                       {ex.name}
                     </span>
                     {ex.was_modified && (
@@ -147,7 +147,7 @@ export default function ActiveWorkout() {
                         <span>{ex.rest_time}</span>
                       </>
                     ) : (
-                      <span>{ex.notes || "10 min"}</span>
+                      <span>{ex.notes || "10 Min"}</span>
                     )}
                   </div>
                 </div>
@@ -156,7 +156,7 @@ export default function ActiveWorkout() {
                 <div className="flex items-center gap-2 shrink-0">
                   <div className="text-right">
                     <span className="text-lg font-bold text-primary leading-none">
-                      {ex.current_load === "Corpo libero" ? "--" : ex.current_load}
+                      {ex.current_load === "Corpo libero" ? "—" : ex.current_load}
                     </span>
                     {ex.current_load !== "Corpo libero" && (
                       <span className="text-[10px] font-medium text-muted-foreground block">kg</span>
@@ -180,7 +180,7 @@ export default function ActiveWorkout() {
       </div>
 
       {/* Complete Button */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 p-5 glass bg-background/80 border-t border-border/30">
+      <div className="fixed bottom-0 left-0 right-0 z-40 p-5 glass-soft bg-background/70 border-t border-border/20">
         <div className="max-w-md mx-auto">
           <Button
             onClick={() => setShowComplete(true)}

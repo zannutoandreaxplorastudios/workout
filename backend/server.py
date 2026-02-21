@@ -168,6 +168,36 @@ async def get_workout_plan(day_number: int):
     return plan
 
 
+@api_router.put("/workout-plans/{day_number}/exercises/{exercise_id}")
+async def update_exercise(day_number: int, exercise_id: str, req: UpdateExerciseRequest):
+    plan = await db.workout_plans.find_one({"day_number": day_number})
+    if not plan:
+        raise HTTPException(404, "Plan not found")
+
+    updated = False
+    for ex in plan["exercises"]:
+        if ex["id"] == exercise_id:
+            if req.name is not None:
+                ex["name"] = req.name
+            if req.sets is not None:
+                ex["sets"] = req.sets
+            if req.reps is not None:
+                ex["reps"] = req.reps
+            if req.current_load is not None:
+                ex["current_load"] = req.current_load
+            updated = True
+            break
+
+    if not updated:
+        raise HTTPException(404, "Exercise not found")
+
+    await db.workout_plans.update_one(
+        {"day_number": day_number},
+        {"$set": {"exercises": plan["exercises"]}}
+    )
+    return {"message": "Exercise updated"}
+
+
 @api_router.put("/workout-plans/{day_number}/exercises/{exercise_id}/load")
 async def update_exercise_load(day_number: int, exercise_id: str, req: UpdateLoadRequest):
     plan = await db.workout_plans.find_one({"day_number": day_number})

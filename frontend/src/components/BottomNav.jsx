@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 const tabs = [
   { path: "/", icon: Home, label: "Home" },
-  { path: "/history", icon: Clock, label: "Storico" },
+  { path: "/history", icon: Clock, label: "History" },
 ];
 
 export function BottomNav() {

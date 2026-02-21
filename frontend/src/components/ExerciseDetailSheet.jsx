@@ -5,19 +5,21 @@ import { Input } from "@/components/ui/input";
 import { MuscleIcon } from "@/components/MuscleIcon";
 import { Plus } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { useUser } from "@/context/UserContext";
 import { api, parseLoad, formatShortDate } from "@/lib/api";
 import { toast } from "sonner";
 
 export function ExerciseDetailSheet({ exercise, dayNumber, open, onClose, onLoadUpdated }) {
+  const { user } = useUser();
   const [logs, setLogs] = useState([]);
   const [newLoad, setNewLoad] = useState("");
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (exercise && open) {
-      api.getExerciseLogs(exercise.id).then(setLogs).catch(() => {});
+    if (exercise && open && user) {
+      api.getExerciseLogs(exercise.id, user.id).then(setLogs).catch(() => {});
     }
-  }, [exercise, open]);
+  }, [exercise, open, user]);
 
   if (!exercise) return null;
 
@@ -37,14 +39,14 @@ export function ExerciseDetailSheet({ exercise, dayNumber, open, onClose, onLoad
         sets: exercise.sets,
         reps: exercise.reps,
         day_number: dayNumber,
-      });
-      const updated = await api.getExerciseLogs(exercise.id);
+      }, user.id);
+      const updated = await api.getExerciseLogs(exercise.id, user.id);
       setLogs(updated);
       onLoadUpdated(exercise.id, newLoad);
       setNewLoad("");
-      toast.success("Carico Aggiornato");
+      toast.success("Load Updated");
     } catch {
-      toast.error("Errore Nell'Aggiornamento");
+      toast.error("Error Updating Load");
     }
     setSaving(false);
   };
@@ -64,12 +66,10 @@ export function ExerciseDetailSheet({ exercise, dayNumber, open, onClose, onLoad
           </DrawerHeader>
 
           <div className="text-center py-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">
-              Carico Attuale
-            </p>
+            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Current Load</p>
             <p className="text-5xl font-black tracking-tighter text-primary" data-testid="current-load-display">
               {exercise.current_load}
-              {exercise.current_load !== "Corpo libero" && (
+              {exercise.current_load !== "Bodyweight" && (
                 <span className="text-lg font-bold text-muted-foreground">kg</span>
               )}
             </p>
@@ -77,9 +77,7 @@ export function ExerciseDetailSheet({ exercise, dayNumber, open, onClose, onLoad
 
           {chartData.length > 1 && (
             <div className="mb-6">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
-                Progressione
-              </p>
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Progression</p>
               <div className="h-40 bg-secondary/30 rounded-2xl p-3" data-testid="load-chart">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={chartData}>
@@ -89,35 +87,10 @@ export function ExerciseDetailSheet({ exercise, dayNumber, open, onClose, onLoad
                         <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <XAxis
-                      dataKey="date"
-                      tick={{ fontSize: 10 }}
-                      stroke="hsl(var(--muted-foreground))"
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis
-                      tick={{ fontSize: 10 }}
-                      stroke="hsl(var(--muted-foreground))"
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "hsl(var(--card))",
-                        border: "1px solid hsl(var(--border))",
-                        borderRadius: "12px",
-                        fontSize: "12px",
-                      }}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="load"
-                      stroke="hsl(var(--primary))"
-                      fill="url(#loadGradient)"
-                      strokeWidth={3}
-                      dot={false}
-                    />
+                    <XAxis dataKey="date" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                    <YAxis tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+                    <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "12px", fontSize: "12px" }} />
+                    <Area type="monotone" dataKey="load" stroke="hsl(var(--primary))" fill="url(#loadGradient)" strokeWidth={3} dot={false} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -126,35 +99,25 @@ export function ExerciseDetailSheet({ exercise, dayNumber, open, onClose, onLoad
 
           {logs.length > 0 && (
             <div className="mb-6">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
-                Storico Carichi
-              </p>
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Load History</p>
               <div className="space-y-2">
-                {[...logs]
-                  .reverse()
-                  .slice(0, 10)
-                  .map((log, i) => (
-                    <div
-                      key={log.id || i}
-                      className="flex items-center justify-between py-2 px-3 rounded-xl bg-secondary/30"
-                    >
-                      <span className="text-xs text-muted-foreground">{formatShortDate(log.date)}</span>
-                      <span className="text-sm font-bold">{log.load}kg</span>
-                    </div>
-                  ))}
+                {[...logs].reverse().slice(0, 10).map((log, i) => (
+                  <div key={log.id || i} className="flex items-center justify-between py-2 px-3 rounded-xl bg-secondary/30">
+                    <span className="text-xs text-muted-foreground">{formatShortDate(log.date)}</span>
+                    <span className="text-sm font-bold">{log.load}kg</span>
+                  </div>
+                ))}
               </div>
             </div>
           )}
 
-          {exercise.current_load !== "Corpo libero" && (
+          {exercise.current_load !== "Bodyweight" && (
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
-                Aggiorna Carico
-              </p>
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Update Load</p>
               <div className="flex gap-3">
                 <Input
                   type="text"
-                  placeholder="Nuovo carico (es. 18)"
+                  placeholder="New load (e.g. 18)"
                   value={newLoad}
                   onChange={(e) => setNewLoad(e.target.value)}
                   className="rounded-2xl h-12 text-lg font-medium flex-1"

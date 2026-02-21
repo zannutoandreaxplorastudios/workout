@@ -59,7 +59,7 @@ export default function HistoryDetail() {
         </div>
 
         <p className="text-sm text-muted-foreground mb-8">
-          {formatDate(session.completed_at)} alle {formatTime(session.completed_at)}
+          {formatDate(session.completed_at)} Alle {formatTime(session.completed_at)}
         </p>
 
         {/* Stats Grid */}

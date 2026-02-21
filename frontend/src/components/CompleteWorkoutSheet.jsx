@@ -50,9 +50,9 @@ export function CompleteWorkoutSheet({ plan, exercises, completed, open, onClose
         })),
       });
       setReport(result.report);
-      toast.success("Allenamento salvato!");
+      toast.success("Allenamento Salvato!");
     } catch {
-      toast.error("Errore nel salvataggio");
+      toast.error("Errore Nel Salvataggio");
     }
     setSaving(false);
   };
@@ -72,7 +72,7 @@ export function CompleteWorkoutSheet({ plan, exercises, completed, open, onClose
               {report ? "Report Allenamento" : "Completa Allenamento"}
             </DrawerTitle>
             <DrawerDescription>
-              {report ? plan.name : `${completed.size} esercizi completati su ${exercises.length}`}
+              {report ? plan.name : `${completed.size} Esercizi Completati Su ${exercises.length}`}
             </DrawerDescription>
           </DrawerHeader>
 
@@ -81,14 +81,14 @@ export function CompleteWorkoutSheet({ plan, exercises, completed, open, onClose
               <div className="text-center py-4">
                 <p className="text-5xl font-black text-primary mb-1">{completed.size}</p>
                 <p className="text-sm text-muted-foreground">
-                  su {exercises.length} esercizi
+                  Su {exercises.length} Esercizi
                 </p>
               </div>
 
               <div className="bg-secondary/30 rounded-2xl p-4 mb-6">
                 <div className="flex items-center gap-3 mb-2">
                   <Flame size={18} className="text-primary" />
-                  <span className="text-sm font-bold">Volume stimato</span>
+                  <span className="text-sm font-bold">Volume Stimato</span>
                 </div>
                 <p className="text-3xl font-black">
                   {totalVolume.toLocaleString("it-IT")}{" "}
@@ -98,7 +98,7 @@ export function CompleteWorkoutSheet({ plan, exercises, completed, open, onClose
 
               <div className="mb-6">
                 <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2 block">
-                  Durata allenamento (minuti)
+                  Durata Allenamento (Minuti)
                 </label>
                 <Input
                   type="number"
@@ -117,8 +117,7 @@ export function CompleteWorkoutSheet({ plan, exercises, completed, open, onClose
                 data-testid="save-workout-btn"
               >
                 <Check size={20} className="mr-2" />
-                {saving ? "Salvataggio..." : "Salva Allenamento"}
-              </Button>
+                {saving ? "Salvataggio..." : "Salva Allenamento"}              </Button>
             </>
           ) : (
             <>
@@ -140,13 +139,13 @@ export function CompleteWorkoutSheet({ plan, exercises, completed, open, onClose
                 <p className="text-2xl font-bold">
                   {report.completed_exercises}/{report.total_exercises}
                 </p>
-                <p className="text-xs text-muted-foreground">Esercizi completati</p>
+                <p className="text-xs text-muted-foreground">Esercizi Completati</p>
               </div>
 
               {report.load_changes && report.load_changes.length > 0 && (
                 <div className="mb-6">
                   <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
-                    Variazioni carichi
+                    Variazioni Carichi
                   </p>
                   <div className="space-y-2">
                     {report.load_changes.map((change, i) => (
@@ -189,7 +188,7 @@ export function CompleteWorkoutSheet({ plan, exercises, completed, open, onClose
                 className="w-full h-14 rounded-2xl text-base font-bold"
                 data-testid="back-to-dashboard-btn"
               >
-                Torna alla Dashboard
+                Torna Alla Dashboard
               </Button>
             </>
           )}

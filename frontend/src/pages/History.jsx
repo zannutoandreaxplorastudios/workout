@@ -32,9 +32,9 @@ export default function History() {
         {sessions.length === 0 ? (
           <div className="text-center py-20" data-testid="history-empty">
             <Clock size={48} className="mx-auto mb-4 text-muted-foreground/30" />
-            <p className="text-muted-foreground font-medium">Nessun allenamento completato</p>
+            <p className="text-muted-foreground font-medium">Nessun Allenamento Completato</p>
             <p className="text-sm text-muted-foreground/60 mt-1">
-              Completa il tuo primo workout per vederlo qui
+              Completa Il Tuo Primo Workout Per Vederlo Qui
             </p>
           </div>
         ) : (
@@ -65,7 +65,7 @@ export default function History() {
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {formatDate(s.completed_at)} alle {formatTime(s.completed_at)}
+                      {formatDate(s.completed_at)} Alle {formatTime(s.completed_at)}
                     </p>
                   </div>
                   <div className="flex items-center gap-3 shrink-0 ml-3">

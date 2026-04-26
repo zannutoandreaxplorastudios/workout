@@ -31,15 +31,15 @@ def parse_load(load_str: str) -> float:
 
 PROFILES = [
     {"id": "andrea", "name": "Andrea", "color": "#F59E0B"},
-    {"id": "roy", "name": "Roy", "color": "#3B82F6"},
-    {"id": "romi", "name": "Romi", "color": "#10B981"},
 ]
+WORKOUT_PLAN_VERSION = "andrea-2026-04-26"
 
 
 class UpdateExerciseRequest(BaseModel):
     name: Optional[str] = None
     sets: Optional[int] = None
     reps: Optional[int] = None
+    rep_range: Optional[str] = None
     current_load: Optional[str] = None
     muscle_group: Optional[str] = None
     muscle_label: Optional[str] = None
@@ -49,6 +49,7 @@ class AddExerciseRequest(BaseModel):
     name: str
     sets: int = 4
     reps: int = 10
+    rep_range: str = ""
     rest_time: str = "1'"
     rest_seconds: int = 60
     current_load: str = "0"
@@ -75,6 +76,7 @@ class SessionExercise(BaseModel):
     name: str
     sets: int
     reps: int
+    rep_range: str = ""
     load: str
     muscle_group: str
     muscle_label: str
@@ -99,12 +101,13 @@ SEED_DATA = [
         "day_number": 1,
         "name": "Day 1",
         "exercises": [
-            {"name": "Panca piana man", "sets": 4, "reps": 4, "rest_time": "2'", "rest_seconds": 120, "current_load": "16", "muscle_group": "chest", "muscle_label": "Chest"},
-            {"name": "Pressa", "sets": 4, "reps": 4, "rest_time": "2'", "rest_seconds": 120, "current_load": "90", "muscle_group": "quads", "muscle_label": "Quads"},
-            {"name": "Rematore man", "sets": 4, "reps": 4, "rest_time": "2'", "rest_seconds": 120, "current_load": "14", "muscle_group": "back", "muscle_label": "Back"},
-            {"name": "Alzate laterali", "sets": 4, "reps": 10, "rest_time": "1'", "rest_seconds": 60, "current_load": "7", "muscle_group": "shoulders", "muscle_label": "Shoulders"},
-            {"name": "Push down barra", "sets": 4, "reps": 10, "rest_time": "1'", "rest_seconds": 60, "current_load": "35", "muscle_group": "triceps", "muscle_label": "Triceps"},
-            {"name": "Curl man", "sets": 4, "reps": 10, "rest_time": "1'", "rest_seconds": 60, "current_load": "8", "muscle_group": "biceps", "muscle_label": "Biceps"},
+            {"name": "Panca piana manubri", "sets": 3, "reps": 10, "rep_range": "6/10", "rest_time": "2.5-3 min", "rest_seconds": 180, "current_load": "16", "muscle_group": "chest", "muscle_label": "Chest"},
+            {"name": "Lat machine", "sets": 4, "reps": 10, "rep_range": "6/10", "rest_time": "2.5-3 min", "rest_seconds": 180, "current_load": "0", "muscle_group": "back", "muscle_label": "Back"},
+            {"name": "Panca inclinata manubri", "sets": 2, "reps": 12, "rep_range": "8/12", "rest_time": "2 min", "rest_seconds": 120, "current_load": "10", "muscle_group": "chest", "muscle_label": "Upper Chest"},
+            {"name": "Alzate laterali cavi", "sets": 3, "reps": 15, "rep_range": "12/15", "rest_time": "60-90 sec", "rest_seconds": 90, "current_load": "7", "muscle_group": "shoulders", "muscle_label": "Shoulders"},
+            {"name": "Leg extension", "sets": 2, "reps": 15, "rep_range": "12/15", "rest_time": "90 sec", "rest_seconds": 90, "current_load": "55", "muscle_group": "quads", "muscle_label": "Quads"},
+            {"name": "Pushdown cavo", "sets": 2, "reps": 15, "rep_range": "10/15", "rest_time": "60-90 sec", "rest_seconds": 90, "current_load": "35", "muscle_group": "triceps", "muscle_label": "Triceps"},
+            {"name": "Curl manubri", "sets": 2, "reps": 15, "rep_range": "10/15", "rest_time": "60-90 sec", "rest_seconds": 90, "current_load": "8", "muscle_group": "biceps", "muscle_label": "Biceps"},
             {"name": "Addominali", "sets": 1, "reps": 0, "rest_time": "10'", "rest_seconds": 600, "current_load": "Bodyweight", "muscle_group": "abs", "muscle_label": "Abs", "notes": "10 min"},
         ]
     },
@@ -112,12 +115,13 @@ SEED_DATA = [
         "day_number": 2,
         "name": "Day 2",
         "exercises": [
-            {"name": "Panca 30\u00b0", "sets": 4, "reps": 8, "rest_time": "1'30''", "rest_seconds": 90, "current_load": "10", "muscle_group": "chest", "muscle_label": "Upper Chest"},
-            {"name": "Leg extension", "sets": 4, "reps": 8, "rest_time": "1'30''", "rest_seconds": 90, "current_load": "55", "muscle_group": "quads", "muscle_label": "Quads"},
-            {"name": "Rouder mach", "sets": 4, "reps": 8, "rest_time": "1'30''", "rest_seconds": 90, "current_load": "30", "muscle_group": "back", "muscle_label": "Back"},
-            {"name": "Arnold press", "sets": 4, "reps": 8, "rest_time": "1'30''", "rest_seconds": 90, "current_load": "10", "muscle_group": "shoulders", "muscle_label": "Shoulders"},
-            {"name": "Face pull", "sets": 4, "reps": 10, "rest_time": "1'", "rest_seconds": 60, "current_load": "30", "muscle_group": "shoulders", "muscle_label": "Rear Delts"},
-            {"name": "Curl corda", "sets": 4, "reps": 10, "rest_time": "1'", "rest_seconds": 60, "current_load": "30", "muscle_group": "biceps", "muscle_label": "Biceps"},
+            {"name": "Leg press", "sets": 3, "reps": 12, "rep_range": "8/12", "rest_time": "2.5-3 min", "rest_seconds": 180, "current_load": "90", "muscle_group": "quads", "muscle_label": "Quads"},
+            {"name": "Deadlift", "sets": 2, "reps": 10, "rep_range": "6/10", "rest_time": "2.5-3 min", "rest_seconds": 180, "current_load": "0", "muscle_group": "hamstrings", "muscle_label": "Hamstrings"},
+            {"name": "Rematore", "sets": 2, "reps": 12, "rep_range": "8/12", "rest_time": "2 min", "rest_seconds": 120, "current_load": "14", "muscle_group": "back", "muscle_label": "Back"},
+            {"name": "Pulley", "sets": 3, "reps": 12, "rep_range": "8/12", "rest_time": "2 min", "rest_seconds": 120, "current_load": "30", "muscle_group": "back", "muscle_label": "Back"},
+            {"name": "Alzate laterali manubri", "sets": 2, "reps": 15, "rep_range": "12/15", "rest_time": "60-90 sec", "rest_seconds": 90, "current_load": "7", "muscle_group": "shoulders", "muscle_label": "Shoulders"},
+            {"name": "Curl EZ", "sets": 2, "reps": 12, "rep_range": "8/12", "rest_time": "90 sec", "rest_seconds": 90, "current_load": "30", "muscle_group": "biceps", "muscle_label": "Biceps"},
+            {"name": "Estensioni tricipiti", "sets": 2, "reps": 15, "rep_range": "10/15", "rest_time": "90 sec", "rest_seconds": 90, "current_load": "25", "muscle_group": "triceps", "muscle_label": "Triceps"},
             {"name": "Addominali", "sets": 1, "reps": 0, "rest_time": "10'", "rest_seconds": 600, "current_load": "Bodyweight", "muscle_group": "abs", "muscle_label": "Abs", "notes": "10 min"},
         ]
     },
@@ -125,16 +129,55 @@ SEED_DATA = [
         "day_number": 3,
         "name": "Day 3",
         "exercises": [
-            {"name": "Panca piana man", "sets": 4, "reps": 12, "rest_time": "1'", "rest_seconds": 60, "current_load": "30", "muscle_group": "chest", "muscle_label": "Chest"},
-            {"name": "Leg curl", "sets": 4, "reps": 12, "rest_time": "1'", "rest_seconds": 60, "current_load": "40", "muscle_group": "hamstrings", "muscle_label": "Hamstrings"},
-            {"name": "Pulley", "sets": 4, "reps": 12, "rest_time": "1'", "rest_seconds": 60, "current_load": "30", "muscle_group": "back", "muscle_label": "Back"},
-            {"name": "Alzate posteriori", "sets": 4, "reps": 15, "rest_time": "1'", "rest_seconds": 60, "current_load": "10", "muscle_group": "shoulders", "muscle_label": "Rear Delts"},
-            {"name": "Push down triangolo", "sets": 4, "reps": 15, "rest_time": "1'", "rest_seconds": 60, "current_load": "25", "muscle_group": "triceps", "muscle_label": "Triceps"},
-            {"name": "Curl 60\u00b0 man", "sets": 4, "reps": 15, "rest_time": "1'", "rest_seconds": 60, "current_load": "6", "muscle_group": "biceps", "muscle_label": "Biceps"},
+            {"name": "Panca inclinata manubri", "sets": 3, "reps": 12, "rep_range": "8/12", "rest_time": "2-3 min", "rest_seconds": 180, "current_load": "10", "muscle_group": "chest", "muscle_label": "Upper Chest"},
+            {"name": "Lat machine", "sets": 3, "reps": 12, "rep_range": "8/12", "rest_time": "2-3 min", "rest_seconds": 180, "current_load": "0", "muscle_group": "back", "muscle_label": "Back"},
+            {"name": "Croci petto", "sets": 2, "reps": 15, "rep_range": "12/15", "rest_time": "60-90 sec", "rest_seconds": 90, "current_load": "0", "muscle_group": "chest", "muscle_label": "Chest"},
+            {"name": "Rematore macchina", "sets": 2, "reps": 15, "rep_range": "10/15", "rest_time": "2 min", "rest_seconds": 120, "current_load": "30", "muscle_group": "back", "muscle_label": "Back"},
+            {"name": "Alzate laterali ai cavi", "sets": 4, "reps": 15, "rep_range": "12/15", "rest_time": "60-90 sec", "rest_seconds": 90, "current_load": "7", "muscle_group": "shoulders", "muscle_label": "Shoulders"},
+            {"name": "Curl al cavo", "sets": 2, "reps": 15, "rep_range": "12/15", "rest_time": "60-90 sec", "rest_seconds": 90, "current_load": "30", "muscle_group": "biceps", "muscle_label": "Biceps"},
+            {"name": "Pushdown corda", "sets": 2, "reps": 15, "rep_range": "12/15", "rest_time": "60-90 sec", "rest_seconds": 90, "current_load": "25", "muscle_group": "triceps", "muscle_label": "Triceps"},
             {"name": "Addominali", "sets": 1, "reps": 0, "rest_time": "10'", "rest_seconds": 600, "current_load": "Bodyweight", "muscle_group": "abs", "muscle_label": "Abs", "notes": "10 min"},
         ]
     }
 ]
+
+
+def build_seed_plan(profile_id: str, day_data: dict) -> dict:
+    exercises = []
+    for idx, ex in enumerate(day_data["exercises"]):
+        exercises.append({"id": f"{profile_id}-d{day_data['day_number']}-ex{idx}", **ex})
+    return {
+        "id": str(uuid.uuid4()),
+        "user_id": profile_id,
+        "day_number": day_data["day_number"],
+        "name": day_data["name"],
+        "exercises": exercises,
+    }
+
+
+async def sync_andrea_workout_plans():
+    current = await db.app_meta.find_one({"key": "workout_plan_version"}, {"_id": 0})
+    if current and current.get("value") == WORKOUT_PLAN_VERSION:
+        return False
+
+    for day_data in SEED_DATA:
+        plan = build_seed_plan("andrea", day_data)
+        await db.workout_plans.update_one(
+            {"user_id": "andrea", "day_number": day_data["day_number"]},
+            {"$set": {
+                "user_id": plan["user_id"],
+                "day_number": plan["day_number"],
+                "name": plan["name"],
+                "exercises": plan["exercises"],
+            }, "$setOnInsert": {"id": plan["id"]}},
+            upsert=True,
+        )
+    await db.app_meta.update_one(
+        {"key": "workout_plan_version"},
+        {"$set": {"value": WORKOUT_PLAN_VERSION, "updated_at": datetime.now(timezone.utc).isoformat()}},
+        upsert=True,
+    )
+    return True
 
 
 @api_router.get("/")
@@ -201,6 +244,11 @@ async def update_exercise(day_number: int, exercise_id: str, req: UpdateExercise
                 ex["sets"] = req.sets
             if req.reps is not None:
                 ex["reps"] = req.reps
+            if req.rep_range is not None:
+                if req.rep_range:
+                    ex["rep_range"] = req.rep_range
+                else:
+                    ex.pop("rep_range", None)
             if req.current_load is not None:
                 ex["current_load"] = req.current_load
             if req.muscle_group is not None:
@@ -229,6 +277,7 @@ async def add_exercise(day_number: int, req: AddExerciseRequest, user_id: str = 
         "name": req.name,
         "sets": req.sets,
         "reps": req.reps,
+        "rep_range": req.rep_range,
         "rest_time": req.rest_time,
         "rest_seconds": req.rest_seconds,
         "current_load": req.current_load,
@@ -414,22 +463,9 @@ async def get_next_workout(user_id: str = Query(...)):
 
 @api_router.post("/seed")
 async def seed_database():
-    await db.workout_plans.delete_many({})
-    await db.exercise_logs.delete_many({})
-    await db.workout_sessions.delete_many({})
-    for profile in PROFILES:
-        for day_data in SEED_DATA:
-            exercises = []
-            for idx, ex in enumerate(day_data["exercises"]):
-                exercises.append({"id": f"{profile['id']}-d{day_data['day_number']}-ex{idx}", **ex})
-            await db.workout_plans.insert_one({
-                "id": str(uuid.uuid4()),
-                "user_id": profile["id"],
-                "day_number": day_data["day_number"],
-                "name": day_data["name"],
-                "exercises": exercises
-            })
-    return {"message": "Database seeded", "users": len(PROFILES), "days_per_user": len(SEED_DATA)}
+    await db.app_meta.delete_one({"key": "workout_plan_version"})
+    await sync_andrea_workout_plans()
+    return {"message": "Workout plans updated", "users": len(PROFILES), "days_per_user": len(SEED_DATA)}
 
 
 app.include_router(api_router)
@@ -448,24 +484,9 @@ logger = logging.getLogger(__name__)
 
 @app.on_event("startup")
 async def startup():
-    count = await db.workout_plans.count_documents({"user_id": {"$exists": True}})
-    if count == 0:
-        await db.workout_plans.delete_many({})
-        await db.exercise_logs.delete_many({})
-        await db.workout_sessions.delete_many({})
-        for profile in PROFILES:
-            for day_data in SEED_DATA:
-                exercises = []
-                for idx, ex in enumerate(day_data["exercises"]):
-                    exercises.append({"id": f"{profile['id']}-d{day_data['day_number']}-ex{idx}", **ex})
-                await db.workout_plans.insert_one({
-                    "id": str(uuid.uuid4()),
-                    "user_id": profile["id"],
-                    "day_number": day_data["day_number"],
-                    "name": day_data["name"],
-                    "exercises": exercises
-                })
-        logger.info(f"Database seeded for {len(PROFILES)} users")
+    updated = await sync_andrea_workout_plans()
+    if updated:
+        logger.info("Workout plans synced for Andrea")
 
 
 @app.on_event("shutdown")

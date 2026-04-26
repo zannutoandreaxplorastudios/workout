@@ -11,11 +11,9 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Sun, Moon, ChevronRight, ChevronDown, Dumbbell, Clock, Flame, Plus, Trash2 } from "lucide-react";
-import { useTheme } from "@/context/ThemeContext";
+import { ChevronRight, ChevronDown, Dumbbell, Clock, Flame, Plus, Trash2 } from "lucide-react";
 import { useUser } from "@/context/UserContext";
-import { MuscleIcon } from "@/components/MuscleIcon";
-import { api, formatDate, formatTime } from "@/lib/api";
+import { api, formatDate, formatTime, formatExerciseTarget } from "@/lib/api";
 import { toast } from "sonner";
 
 const dayColors = {
@@ -34,8 +32,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [showAddDay, setShowAddDay] = useState(false);
   const [newDayName, setNewDayName] = useState("");
-  const { theme, toggleTheme } = useTheme();
-  const { user, logout } = useUser();
+  const { user } = useUser();
   const navigate = useNavigate();
 
   const loadData = () => {
@@ -105,7 +102,6 @@ export default function Dashboard() {
         <div className="flex items-center justify-between mb-14">
           <div className="flex items-center gap-3">
             <button
-              onClick={logout}
               className="w-11 h-11 rounded-2xl flex items-center justify-center text-white font-bold text-sm shrink-0 transition-all active:scale-90"
               style={{ backgroundColor: user.color }}
               data-testid="profile-avatar"
@@ -121,13 +117,6 @@ export default function Dashboard() {
               </h1>
             </div>
           </div>
-          <button
-            onClick={toggleTheme}
-            className="w-11 h-11 rounded-2xl bg-secondary/80 card-blur flex items-center justify-center transition-all active:scale-90"
-            data-testid="theme-toggle"
-          >
-            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
         </div>
 
         {/* Day Cards */}
@@ -222,15 +211,10 @@ export default function Dashboard() {
                           plan.exercises.map((ex) => (
                             <div key={ex.id} className="flex items-center justify-between py-0.5">
                               <div className="flex items-center gap-3 min-w-0 flex-1">
-                                <MuscleIcon group={ex.muscle_group} size="sm" />
                                 <span className="text-sm font-medium truncate capitalize">{ex.name}</span>
                               </div>
                               <div className="flex items-center gap-3 shrink-0 ml-3">
-                                {ex.reps > 0 ? (
-                                  <span className="text-xs text-muted-foreground">{ex.sets}x{ex.reps}</span>
-                                ) : (
-                                  <span className="text-xs text-muted-foreground">{ex.notes || "10 Min"}</span>
-                                )}
+                                <span className="text-xs text-muted-foreground">{formatExerciseTarget(ex)}</span>
                                 <span className="text-sm font-bold text-primary min-w-[40px] text-right">
                                   {ex.current_load === "Bodyweight" ? "—" : `${ex.current_load}kg`}
                                 </span>

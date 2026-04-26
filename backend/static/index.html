@@ -31,6 +31,19 @@
       -webkit-font-smoothing: antialiased;
       overscroll-behavior: none;
     }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -120px -80px auto -80px;
+      height: 360px;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(233, 138, 50, .22), transparent 34%),
+        radial-gradient(circle at 82% 8%, rgba(87, 166, 214, .16), transparent 32%),
+        radial-gradient(circle at 50% 80%, rgba(126, 87, 194, .10), transparent 38%);
+      filter: blur(30px);
+      pointer-events: none;
+      z-index: -1;
+    }
     button, input, select { font: inherit; }
     button {
       border: 0;
@@ -46,6 +59,10 @@
     button.secondary {
       background: rgba(31, 27, 22, .06);
       color: var(--text);
+    }
+    button.danger {
+      background: #fee2e2;
+      color: var(--bad);
     }
     input {
       width: 100%;
@@ -71,7 +88,6 @@
     h1 { font-size: 32px; line-height: 1; letter-spacing: 0; margin-bottom: 0; font-weight: 800; }
     h2 { font-size: 20px; margin-bottom: 0; font-weight: 800; }
     h3 { font-size: 17px; margin-bottom: 8px; }
-    .muted { color: var(--muted); }
     .eyebrow {
       color: var(--muted);
       font-size: 11px;
@@ -91,6 +107,7 @@
       font-weight: 800;
       flex: 0 0 auto;
     }
+    .muted { color: var(--muted); }
     .grid { display: grid; gap: 28px; }
     .days { grid-template-columns: 1fr; }
     .card {
@@ -108,6 +125,7 @@
       gap: 10px;
     }
     .exercise { border-top: 0; padding: 6px 0; }
+    .exercise:first-child { border-top: 0; }
     .target {
       display: flex;
       flex-wrap: wrap;
@@ -150,6 +168,18 @@
       border-color: var(--accent-line);
       box-shadow: 0 18px 48px rgba(233, 138, 50, .10);
     }
+    .exercise-card {
+      background: rgba(255, 255, 255, .72);
+      border: 1px solid rgba(39, 35, 29, .07);
+      border-radius: 18px;
+      padding: 10px 11px;
+      box-shadow: 0 10px 24px rgba(50, 42, 32, .035);
+    }
+    .exercise-separator {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(31, 27, 22, .10), transparent);
+      margin: 3px 8px;
+    }
     .exercise-row {
       display: flex;
       align-items: center;
@@ -172,6 +202,35 @@
       color: var(--accent);
       font-weight: 800;
       font-size: 14px;
+    }
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(31, 27, 22, .055);
+      color: var(--muted);
+    }
+    .duration-box {
+      display: grid;
+      grid-template-columns: 1fr 92px;
+      gap: 10px;
+      align-items: end;
+      margin: 14px 0 8px;
+      padding: 12px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255,255,255,.82), rgba(255,255,255,.50));
+      border: 1px solid var(--line);
+    }
+    .duration-box label,
+    .form-grid label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
     }
     .section-title {
       margin: 48px 0 22px;
@@ -219,10 +278,86 @@
       border: 1px solid var(--line);
       backdrop-filter: blur(24px) saturate(150%);
     }
+    .modal.report .sheet {
+      max-height: calc(100vh - 28px);
+      overflow: hidden;
+      padding: 12px;
+      border-radius: 24px;
+    }
+    .report-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .report-head h2 {
+      font-size: 18px;
+      margin-bottom: 3px;
+    }
+    .report-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .metric-card {
+      border-radius: 16px;
+      padding: 9px;
+      background: rgba(255,255,255,.74);
+      border: 1px solid var(--line);
+    }
+    .metric-card span {
+      color: var(--muted);
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .metric-card strong {
+      display: block;
+      font-size: 19px;
+      margin-top: 2px;
+    }
+    .report-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .report-ex {
+      border-radius: 13px;
+      padding: 7px;
+      background: rgba(255,255,255,.70);
+      border: 1px solid rgba(39, 35, 29, .07);
+      min-width: 0;
+    }
+    .report-ex strong {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 11px;
+      line-height: 1.15;
+    }
+    .report-ex span {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .report-foot {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
     .hidden { display: none !important; }
     .error {
       padding: 12px;
-      border-radius: 16px;
+      border-radius: 8px;
       background: #fee2e2;
       color: var(--bad);
       margin-bottom: 12px;
@@ -275,6 +410,8 @@
       activeExercises: [],
       startedAt: null,
       nextDay: 1,
+      durationMinutes: 1,
+      durationTouched: false,
       view: "dashboard"
     };
 
@@ -303,6 +440,12 @@
       return `${ex.sets}x${ex.rep_range || ex.reps}`;
     }
 
+    function loadValue(load) {
+      if (!load || load === "Bodyweight") return 0;
+      const match = String(load).match(/(\d+)/);
+      return match ? Number(match[1]) : 0;
+    }
+
     function formatDate(iso) {
       return new Date(iso).toLocaleDateString("it-IT", { day: "2-digit", month: "short", year: "numeric" });
     }
@@ -328,7 +471,7 @@
       state.view = view;
       ["dashboard", "active", "history"].forEach((id) => $(`#${id}`).classList.toggle("hidden", id !== view));
       document.querySelectorAll(".bottom-nav button").forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.view === view);
+      btn.classList.toggle("active", btn.dataset.view === view);
       });
       render();
     }
@@ -353,16 +496,20 @@
             </div>
             <button onclick="startWorkout(${plan.day_number})">Start</button>
           </div>
-          <div>
-            ${plan.exercises.map((ex) => `
-              <div class="exercise">
+          <div class="grid" style="gap:8px">
+            ${plan.exercises.map((ex, index) => `
+              <div class="exercise-card">
                 <div class="exercise-row">
                   <div style="min-width:0">
                     <div class="exercise-name">${ex.name}</div>
                     <div class="target"><span>${target(ex)}</span><span>${ex.rest_time || ""}</span></div>
                   </div>
-                  <div class="load">${ex.current_load === "Bodyweight" ? "—" : `${ex.current_load}kg`}</div>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div class="load">${ex.current_load === "Bodyweight" ? "—" : `${ex.current_load}kg`}</div>
+                    <button class="icon-btn" onclick="editExercise(${plan.day_number}, '${ex.id}')" aria-label="Modifica">✎</button>
+                  </div>
                 </div>
+                ${index < plan.exercises.length - 1 ? `<div class="exercise-separator"></div>` : ""}
               </div>
             `).join("")}
             ${plan.day_number === state.nextDay ? `<button style="width:100%;margin-top:18px;padding:14px" onclick="startWorkout(${plan.day_number})">Start Workout</button>` : ""}
@@ -378,21 +525,30 @@
         root.innerHTML = `<div class="card"><h2>Nessun workout in corso</h2><p class="muted">Scegli un Day dalla schermata Workout.</p></div>`;
         return;
       }
-      const elapsed = state.startedAt ? Math.max(1, Math.round((Date.now() - state.startedAt) / 60000)) : 1;
+      const elapsed = getDurationMinutes();
       root.innerHTML = `
         <div class="card">
           <div class="day-head">
             <div>
               <h2>${state.activeDay.name}</h2>
-              <p class="muted">${elapsed} minuti</p>
+              <p class="muted">Workout in corso</p>
             </div>
             <button onclick="finishWorkout()">Salva</button>
           </div>
+          <div class="duration-box">
+            <div>
+              <span class="eyebrow" style="margin:0">Durata allenamento</span>
+              <p class="muted" style="margin:4px 0 0;font-size:12px">Puoi modificarla prima del salvataggio</p>
+            </div>
+            <label>Minuti<input id="durationInput" type="number" min="1" value="${elapsed}" onchange="updateDuration(this.value)"></label>
+          </div>
           ${state.activeExercises.map((ex, index) => `
-            <div class="exercise">
-              <strong>${ex.name}</strong>
+            <div class="exercise-card" style="margin-top:9px">
+              <div class="exercise-row">
+                <strong class="exercise-name">${ex.name}</strong>
+                <span class="pill">${target(ex)}</span>
+              </div>
               <div class="target">
-                <span>${target(ex)}</span>
                 <span>${ex.rest_time || ""}</span>
               </div>
               <div class="form-grid">
@@ -440,6 +596,8 @@
       const plan = state.plans.find((item) => item.day_number === dayNumber);
       state.activeDay = plan;
       state.startedAt = Date.now();
+      state.durationMinutes = 1;
+      state.durationTouched = false;
       state.activeExercises = plan.exercises.map((ex) => ({
         exercise_id: ex.id,
         name: ex.name,
@@ -456,6 +614,16 @@
       switchView("active");
     }
 
+    function getDurationMinutes() {
+      if (state.durationTouched) return Math.max(1, Number(state.durationMinutes) || 1);
+      return state.startedAt ? Math.max(1, Math.round((Date.now() - state.startedAt) / 60000)) : 1;
+    }
+
+    function updateDuration(value) {
+      state.durationTouched = true;
+      state.durationMinutes = Math.max(1, Number(value) || 1);
+    }
+
     function updateActive(index, field, value) {
       const numeric = field === "sets" || field === "reps";
       state.activeExercises[index][field] = numeric ? Number(value) : value;
@@ -463,9 +631,9 @@
 
     async function finishWorkout() {
       if (!state.activeDay) return;
-      const duration = Math.max(1, Math.round((Date.now() - state.startedAt) / 60000));
+      const duration = getDurationMinutes();
       try {
-        await request(`/workout-sessions?user_id=${userId}`, {
+        const savedSession = await request(`/workout-sessions?user_id=${userId}`, {
           method: "POST",
           body: JSON.stringify({
             day_number: state.activeDay.day_number,
@@ -478,45 +646,106 @@
         state.activeExercises = [];
         await loadData();
         switchView("history");
+        openReport(savedSession);
       } catch (err) {
         showError("Salvataggio non riuscito. " + err.message);
       }
     }
 
-    function showSession(id) {
-      const session = state.sessions.find((item) => item.id === id);
-      const changes = session.report?.load_changes || [];
+    function editExercise(dayNumber, exerciseId) {
+      const plan = state.plans.find((item) => item.day_number === dayNumber);
+      const ex = plan.exercises.find((item) => item.id === exerciseId);
       $("#modalContent").innerHTML = `
-        <h2>${session.day_name}</h2>
-        <p class="muted">${formatDate(session.completed_at)} · ${formatTime(session.completed_at)}</p>
-        <div class="summary">
-          <div class="card"><span class="muted">Durata</span><strong>${session.duration_minutes} min</strong></div>
-          <div class="card"><span class="muted">Volume totale</span><strong>${session.report?.total_volume || 0} kg</strong></div>
+        <h2>Modifica esercizio</h2>
+        <label>Nome<input id="editName" value="${ex.name}"></label>
+        <div class="form-grid">
+          <label>Serie<input id="editSets" type="number" value="${ex.sets}"></label>
+          <label>Ripetizioni<input id="editReps" type="number" value="${ex.reps}"></label>
+          <label>Range<input id="editRange" value="${ex.rep_range || ""}"></label>
         </div>
-        <h3>Esercizi eseguiti</h3>
-        ${session.exercises.map((ex) => `
-          <div class="exercise">
-            <strong>${ex.name}</strong>
-            <div class="target">
-              <span>${ex.sets}x${ex.rep_range || ex.reps}</span>
-              <span>${ex.load} kg</span>
-            </div>
-          </div>
-        `).join("")}
-        <h3>Variazioni percentuali</h3>
-        ${changes.length ? changes.map((item) => `
-          <p class="${item.change_pct >= 0 ? "ok" : ""}">${item.exercise_name}: ${item.change_pct > 0 ? "+" : ""}${item.change_pct}%</p>
-        `).join("") : `<p class="muted">Nessuna variazione.</p>`}
-        <h3>Modifiche effettuate</h3>
-        ${session.exercises.filter((ex) => ex.was_modified).length ? session.exercises.filter((ex) => ex.was_modified).map((ex) => `
-          <p>${ex.original_name || ex.name} → ${ex.name}</p>
-        `).join("") : `<p class="muted">Nessuna modifica.</p>`}
-        <button class="secondary" onclick="closeModal()">Chiudi</button>
+        <div class="form-grid">
+          <label>Carico<input id="editLoad" value="${ex.current_load || "0"}"></label>
+          <label>Muscolo<input id="editMuscle" value="${ex.muscle_group || ""}"></label>
+          <label>Etichetta<input id="editLabel" value="${ex.muscle_label || ""}"></label>
+        </div>
+        <div class="row">
+          <button onclick="saveExercise(${dayNumber}, '${exerciseId}')">Salva</button>
+          <button class="secondary" onclick="closeModal()">Annulla</button>
+        </div>
       `;
       $("#modal").classList.add("open");
     }
 
-    function closeModal() { $("#modal").classList.remove("open"); }
+    async function saveExercise(dayNumber, exerciseId) {
+      try {
+        await request(`/workout-plans/${dayNumber}/exercises/${exerciseId}?user_id=${userId}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            name: $("#editName").value,
+            sets: Number($("#editSets").value),
+            reps: Number($("#editReps").value),
+            rep_range: $("#editRange").value,
+            current_load: $("#editLoad").value,
+            muscle_group: $("#editMuscle").value,
+            muscle_label: $("#editLabel").value
+          })
+        });
+        closeModal();
+        await loadData();
+      } catch (err) {
+        showError("Modifica non riuscita. " + err.message);
+      }
+    }
+
+    function showSession(id) {
+      const session = state.sessions.find((item) => item.id === id);
+      openReport(session);
+    }
+
+    function openReport(session) {
+      const changes = session.report?.load_changes || [];
+      const modified = session.exercises.filter((ex) => ex.was_modified);
+      const volume = session.report?.total_volume || 0;
+      $("#modal").classList.add("report");
+      $("#modalContent").innerHTML = `
+        <div class="report-head">
+          <div>
+            <span class="pill">${session.day_name}</span>
+            <h2>Report workout</h2>
+            <p class="muted" style="font-size:11px;margin:0">${formatDate(session.completed_at)} · ${formatTime(session.completed_at)}</p>
+          </div>
+          <button class="secondary" onclick="closeModal()" style="width:34px;height:34px;padding:0">×</button>
+        </div>
+        <div class="report-metrics">
+          <div class="metric-card"><span>Durata</span><strong>${session.duration_minutes} min</strong></div>
+          <div class="metric-card"><span>Volume totale</span><strong>${volume} kg</strong></div>
+        </div>
+        <div class="report-grid">
+          ${session.exercises.map((ex) => `
+            <div class="report-ex">
+              <strong>${ex.name}</strong>
+              <span>${ex.sets}x${ex.rep_range || ex.reps} · ${ex.load} kg</span>
+            </div>
+          `).join("")}
+        </div>
+        <div class="report-foot">
+          <div>
+            <strong style="color:var(--text)">Variazioni</strong>
+            ${changes.length ? changes.map((item) => `<span> · ${item.exercise_name}: ${item.change_pct > 0 ? "+" : ""}${item.change_pct}%</span>`).join("") : `<span> · Nessuna</span>`}
+          </div>
+          <div>
+            <strong style="color:var(--text)">Modifiche</strong>
+            ${modified.length ? modified.map((ex) => `<span> · ${ex.original_name || ex.name} → ${ex.name}</span>`).join("") : `<span> · Nessuna</span>`}
+          </div>
+        </div>
+      `;
+      $("#modal").classList.add("open");
+    }
+
+    function closeModal() {
+      $("#modal").classList.remove("open");
+      $("#modal").classList.remove("report");
+    }
 
     document.querySelectorAll(".bottom-nav button").forEach((btn) => {
       btn.addEventListener("click", () => switchView(btn.dataset.view));

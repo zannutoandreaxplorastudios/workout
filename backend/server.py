@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 ROOT_DIR = Path(__file__).parent
 FRONTEND_BUILD_DIR = ROOT_DIR.parent / "frontend" / "build"
 FRONTEND_DIR = ROOT_DIR.parent / "frontend"
+FALLBACK_FRONTEND_FILE = ROOT_DIR / "static" / "index.html"
 load_dotenv(ROOT_DIR / '.env')
 
 mongo_url = os.environ['MONGO_URL']
@@ -541,5 +542,8 @@ async def serve_frontend(full_path: str):
     index_file = FRONTEND_BUILD_DIR / "index.html"
     if index_file.is_file():
         return FileResponse(index_file)
+
+    if FALLBACK_FRONTEND_FILE.is_file():
+        return FileResponse(FALLBACK_FRONTEND_FILE)
 
     raise HTTPException(404, "Frontend build not found")

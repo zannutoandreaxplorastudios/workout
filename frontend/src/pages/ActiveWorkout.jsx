@@ -10,7 +10,7 @@ import { ExerciseDetailSheet } from "@/components/ExerciseDetailSheet";
 import { EditExerciseDialog } from "@/components/EditExerciseDialog";
 import { CompleteWorkoutSheet } from "@/components/CompleteWorkoutSheet";
 import { useUser } from "@/context/UserContext";
-import { api } from "@/lib/api";
+import { api, formatExerciseTarget } from "@/lib/api";
 import { toast } from "sonner";
 
 export default function ActiveWorkout() {
@@ -162,15 +162,9 @@ export default function ActiveWorkout() {
                     )}
                   </div>
                   <div className="flex items-center gap-3 text-xs text-muted-foreground ml-10">
-                    {ex.reps > 0 ? (
-                      <>
-                        <span className="font-medium">{ex.sets}x{ex.reps}</span>
-                        <span>-</span>
-                        <span>{ex.rest_time}</span>
-                      </>
-                    ) : (
-                      <span>{ex.notes || "10 Min"}</span>
-                    )}
+                    <span className="font-medium">{formatExerciseTarget(ex)}</span>
+                    {ex.reps > 0 && <span>-</span>}
+                    {ex.reps > 0 && <span>{ex.rest_time}</span>}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">

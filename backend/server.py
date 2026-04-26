@@ -1,6 +1,8 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Query
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import FileResponse
+from starlette.staticfiles import StaticFiles
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import re
@@ -12,6 +14,7 @@ import uuid
 from datetime import datetime, timezone
 
 ROOT_DIR = Path(__file__).parent
+FRONTEND_BUILD_DIR = ROOT_DIR.parent / "frontend" / "build"
 load_dotenv(ROOT_DIR / '.env')
 
 mongo_url = os.environ['MONGO_URL']
@@ -473,6 +476,9 @@ async def seed_database():
 
 app.include_router(api_router)
 
+if (FRONTEND_BUILD_DIR / "static").exists():
+    app.mount("/static", StaticFiles(directory=FRONTEND_BUILD_DIR / "static"), name="static")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
@@ -495,3 +501,19 @@ async def startup():
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
+
+@app.get("/{full_path:path}")
+async def serve_frontend(full_path: str):
+    if full_path.startswith("api"):
+        raise HTTPException(404, "Not found")
+
+    requested_file = FRONTEND_BUILD_DIR / full_path
+    if requested_file.is_file():
+        return FileResponse(requested_file)
+
+    index_file = FRONTEND_BUILD_DIR / "index.html"
+    if index_file.is_file():
+        return FileResponse(index_file)
+
+    raise HTTPException(404, "Frontend build not found")

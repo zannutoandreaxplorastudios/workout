@@ -1,14 +1,16 @@
 import { createContext, useContext, useState } from "react";
 
 const UserContext = createContext();
+const ANDREA_PROFILE = { id: "andrea", name: "Andrea", color: "#F59E0B" };
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(() => {
     try {
       const saved = localStorage.getItem("gym-user");
-      return saved ? JSON.parse(saved) : null;
+      const parsed = saved ? JSON.parse(saved) : ANDREA_PROFILE;
+      return parsed?.id === "andrea" ? parsed : ANDREA_PROFILE;
     } catch {
-      return null;
+      return ANDREA_PROFILE;
     }
   });
 
@@ -18,8 +20,8 @@ export function UserProvider({ children }) {
   };
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem("gym-user");
+    setUser(ANDREA_PROFILE);
+    localStorage.setItem("gym-user", JSON.stringify(ANDREA_PROFILE));
   };
 
   return (

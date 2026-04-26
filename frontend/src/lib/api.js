@@ -36,6 +36,11 @@ export const parseLoad = (load) => {
   return match ? parseInt(match[1]) : 0;
 };
 
+export const formatExerciseTarget = (exercise) => {
+  if (!exercise || exercise.reps <= 0) return exercise?.notes || "10 min";
+  return `${exercise.sets}x${exercise.rep_range || exercise.reps}`;
+};
+
 export const formatDate = (iso) =>
   new Date(iso).toLocaleDateString("en-US", { day: "2-digit", month: "short", year: "numeric" });
 

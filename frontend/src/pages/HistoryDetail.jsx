@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { MuscleIcon } from "@/components/MuscleIcon";
 import { useUser } from "@/context/UserContext";
-import { api, formatDate, formatTime } from "@/lib/api";
+import { api, formatDate, formatTime, formatExerciseTarget } from "@/lib/api";
 
 export default function HistoryDetail() {
   const { sessionId } = useParams();
@@ -37,6 +37,8 @@ export default function HistoryDetail() {
   }
 
   const report = session.report;
+  const performedExercises = session.exercises.filter((ex) => ex.completed);
+  const modifiedExercises = session.exercises.filter((ex) => ex.was_modified);
 
   return (
     <div className="min-h-screen bg-background pb-24" data-testid="history-detail">
@@ -59,7 +61,7 @@ export default function HistoryDetail() {
           {formatDate(session.completed_at)} At {formatTime(session.completed_at)}
         </p>
 
-        <div className="grid grid-cols-3 gap-3 mb-8">
+        <div className="grid grid-cols-2 gap-3 mb-4">
           <div className="bg-secondary/30 rounded-2xl p-4 text-center">
             <Clock size={16} className="mx-auto mb-2 text-muted-foreground" />
             <p className="text-xl font-bold">{session.duration_minutes}'</p>
@@ -70,12 +72,37 @@ export default function HistoryDetail() {
             <p className="text-xl font-bold">{report.total_volume?.toLocaleString("en-US")}</p>
             <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Volume kg</p>
           </div>
-          <div className="bg-secondary/30 rounded-2xl p-4 text-center">
-            <Check size={16} className="mx-auto mb-2 text-green-500" />
-            <p className="text-xl font-bold">{report.completed_exercises}/{report.total_exercises}</p>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Exercises</p>
+        </div>
+
+        <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest mb-8">
+          {report.completed_exercises}/{report.total_exercises} Exercises Completed
+        </p>
+
+        <div className="mb-8">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Exercises Performed</h3>
+          <div className="space-y-2">
+            {performedExercises.map((ex, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.05 }}
+                className="flex items-center gap-3 py-3 px-4 rounded-2xl bg-secondary/30"
+                data-testid={`history-exercise-${i}`}
+              >
+                <MuscleIcon group={ex.muscle_group} size="sm" />
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-medium truncate capitalize block">{ex.name}</span>
+                  <p className="text-xs text-muted-foreground">{formatExerciseTarget(ex)}</p>
+                </div>
+                <span className="text-sm font-bold text-primary shrink-0">{ex.load === "Bodyweight" ? "-" : `${ex.load}kg`}</span>
+                <Check size={14} className="text-green-500 shrink-0" />
+              </motion.div>
+            ))}
           </div>
         </div>
+
+        <Separator className="mb-8" />
 
         {report.load_changes && report.load_changes.length > 0 && (
           <div className="mb-8">
@@ -104,36 +131,31 @@ export default function HistoryDetail() {
           </div>
         )}
 
-        <Separator className="mb-8" />
-
-        <div>
-          <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Exercises Performed</h3>
+        {modifiedExercises.length > 0 && (
+        <div className="mb-8">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Workout Modifications</h3>
           <div className="space-y-2">
-            {session.exercises.map((ex, i) => (
+            {modifiedExercises.map((ex, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className={`flex items-center gap-3 py-3 px-4 rounded-2xl ${ex.completed ? "bg-secondary/30" : "bg-destructive/10"}`}
-                data-testid={`history-exercise-${i}`}
+                className="flex items-center gap-3 py-3 px-4 rounded-2xl bg-amber-500/10"
               >
                 <MuscleIcon group={ex.muscle_group} size="sm" />
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium truncate capitalize">{ex.name}</span>
-                    {ex.was_modified && (
-                      <span className="text-[9px] text-amber-500 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded-full">MOD</span>
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">{ex.reps > 0 ? `${ex.sets}x${ex.reps}` : "10 min"}</p>
+                  <span className="text-sm font-medium truncate capitalize block">{ex.name}</span>
+                  <p className="text-xs text-muted-foreground">
+                    Changed From {ex.original_name || "Original Exercise"}
+                  </p>
                 </div>
-                <span className="text-sm font-bold text-primary shrink-0">{ex.load === "Bodyweight" ? "—" : `${ex.load}kg`}</span>
-                {ex.completed && <Check size={14} className="text-green-500 shrink-0" />}
+                <span className="text-xs font-bold text-amber-600 shrink-0">MOD</span>
               </motion.div>
             ))}
           </div>
         </div>
+        )}
 
         <div className="mt-8">
           <Button onClick={() => navigate("/")} variant="outline" className="w-full h-12 rounded-2xl font-bold" data-testid="back-to-history-btn">

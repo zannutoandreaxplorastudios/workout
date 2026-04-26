@@ -16,7 +16,10 @@ load_dotenv(ROOT_DIR / '.env')
 
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+db_name = re.sub(r'\s+', '_', os.environ['DB_NAME'].strip())
+if not db_name:
+    raise RuntimeError("DB_NAME environment variable cannot be empty")
+db = client[db_name]
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")

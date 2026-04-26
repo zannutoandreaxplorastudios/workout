@@ -7,6 +7,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import re
 import logging
+import subprocess
 from pathlib import Path
 from pydantic import BaseModel
 from typing import List, Optional
@@ -15,6 +16,7 @@ from datetime import datetime, timezone
 
 ROOT_DIR = Path(__file__).parent
 FRONTEND_BUILD_DIR = ROOT_DIR.parent / "frontend" / "build"
+FRONTEND_DIR = ROOT_DIR.parent / "frontend"
 load_dotenv(ROOT_DIR / '.env')
 
 mongo_url = os.environ['MONGO_URL']
@@ -26,6 +28,28 @@ db = client[db_name]
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
+
+
+def ensure_frontend_build():
+    if (FRONTEND_BUILD_DIR / "index.html").is_file():
+        return
+    if not (FRONTEND_DIR / "package.json").is_file():
+        return
+    try:
+        subprocess.run(
+            ["npm", "install", "--legacy-peer-deps"],
+            cwd=FRONTEND_DIR,
+            check=True,
+            timeout=180,
+        )
+        subprocess.run(
+            ["npm", "run", "build"],
+            cwd=FRONTEND_DIR,
+            check=True,
+            timeout=180,
+        )
+    except (OSError, subprocess.SubprocessError) as exc:
+        logging.getLogger(__name__).warning("Frontend build unavailable: %s", exc)
 
 
 def parse_load(load_str: str) -> float:
@@ -473,6 +497,8 @@ async def seed_database():
     await sync_andrea_workout_plans()
     return {"message": "Workout plans updated", "users": len(PROFILES), "days_per_user": len(SEED_DATA)}
 
+
+ensure_frontend_build()
 
 app.include_router(api_router)
 

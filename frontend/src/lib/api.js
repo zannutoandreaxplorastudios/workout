@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || window.location.origin;
+const API_URL = `${BACKEND_URL}/api`;
 
 const client = axios.create({
   baseURL: API_URL,
@@ -12,7 +13,7 @@ export const api = {
   getWorkoutPlans: (userId) => client.get(`/workout-plans?user_id=${userId}`).then((r) => r.data),
   getWorkoutPlan: (day, userId) => client.get(`/workout-plans/${day}?user_id=${userId}`).then((r) => r.data),
   createWorkoutDay: (userId, data) => client.post(`/workout-plans?user_id=${userId}`, data || {}).then((r) => r.data),
-  deleteWorkoutDay: (day, userId) => client.delete(`/workout-plans/${day}?user_id=${userId}`).then((r) => r.data),
+  deleteWorkoutDay: (day, userId) => client.delete(`/workout-plans?user_id=${userId}`).then((r) => r.data),
   updateExercise: (day, exId, data, userId) =>
     client.put(`/workout-plans/${day}/exercises/${exId}?user_id=${userId}`, data).then((r) => r.data),
   addExercise: (day, data, userId) =>

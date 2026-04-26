@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Check, Clock, Flame, ArrowRight } from "lucide-react";
 import { useUser } from "@/context/UserContext";
-import { api, parseLoad } from "@/lib/api";
+import { api, parseLoad, formatExerciseTarget } from "@/lib/api";
 import { toast } from "sonner";
 
 export function CompleteWorkoutSheet({ plan, exercises, completed, open, onClose, onComplete }) {
@@ -36,6 +36,7 @@ export function CompleteWorkoutSheet({ plan, exercises, completed, open, onClose
           name: ex.name,
           sets: ex.sets,
           reps: ex.reps,
+          rep_range: ex.rep_range || "",
           load: ex.current_load,
           muscle_group: ex.muscle_group,
           muscle_label: ex.muscle_label,
@@ -84,7 +85,7 @@ export function CompleteWorkoutSheet({ plan, exercises, completed, open, onClose
                   <span className="text-sm font-bold">Estimated Volume</span>
                 </div>
                 <p className="text-3xl font-black">
-                  {totalVolume.toLocaleString("en-US")}{" "}
+                  {totalVolume.toLocaleString("en-US")} {" "}
                   <span className="text-sm font-normal text-muted-foreground">kg</span>
                 </p>
               </div>
@@ -132,6 +133,23 @@ export function CompleteWorkoutSheet({ plan, exercises, completed, open, onClose
                 <Check size={18} className="mx-auto mb-2 text-green-500" />
                 <p className="text-2xl font-bold">{report.completed_exercises}/{report.total_exercises}</p>
                 <p className="text-xs text-muted-foreground">Exercises Completed</p>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Exercises Performed</p>
+                <div className="space-y-2">
+                  {completedExercises.map((ex) => (
+                    <div key={ex.id} className="flex items-center justify-between py-2 px-3 rounded-xl bg-secondary/30">
+                      <div className="min-w-0">
+                        <span className="text-sm font-medium truncate block">{ex.name}</span>
+                        <span className="text-xs text-muted-foreground">{formatExerciseTarget(ex)}</span>
+                      </div>
+                      <span className="text-sm font-bold text-primary shrink-0 ml-3">
+                        {ex.current_load === "Bodyweight" ? "-" : `${ex.current_load}kg`}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {report.load_changes && report.load_changes.length > 0 && (

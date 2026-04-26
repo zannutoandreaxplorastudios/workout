@@ -13,7 +13,7 @@ export const api = {
   getWorkoutPlans: (userId) => client.get(`/workout-plans?user_id=${userId}`).then((r) => r.data),
   getWorkoutPlan: (day, userId) => client.get(`/workout-plans/${day}?user_id=${userId}`).then((r) => r.data),
   createWorkoutDay: (userId, data) => client.post(`/workout-plans?user_id=${userId}`, data || {}).then((r) => r.data),
-  deleteWorkoutDay: (day, userId) => client.delete(`/workout-plans?user_id=${userId}`).then((r) => r.data),
+  deleteWorkoutDay: (day, userId) => client.delete(`/workout-plans/${day}?user_id=${userId}`).then((r) => r.data),
   updateExercise: (day, exId, data, userId) =>
     client.put(`/workout-plans/${day}/exercises/${exId}?user_id=${userId}`, data).then((r) => r.data),
   addExercise: (day, data, userId) =>

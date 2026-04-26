@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Workout Tracker</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f4ee;
+      --panel: #fffaf1;
+      --card: #ffffff;
+      --text: #171717;
+      --muted: #6f6a60;
+      --line: #e5ded2;
+      --accent: #f59e0b;
+      --accent-dark: #b45309;
+      --good: #15803d;
+      --bad: #b91c1c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input, select {
+      font: inherit;
+    }
+    button {
+      border: 0;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #111;
+      font-weight: 700;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: #f0e7da;
+      color: var(--text);
+    }
+    button.danger {
+      background: #fee2e2;
+      color: var(--bad);
+    }
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+      color: var(--text);
+    }
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 20px 14px 92px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: 28px; margin-bottom: 4px; }
+    h2 { font-size: 22px; margin-bottom: 12px; }
+    h3 { font-size: 17px; margin-bottom: 8px; }
+    .muted { color: var(--muted); }
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+    .days {
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      box-shadow: 0 8px 24px rgba(120, 85, 35, .08);
+    }
+    .day-head, .row, .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .exercise {
+      border-top: 1px solid var(--line);
+      padding: 12px 0;
+    }
+    .exercise:first-child { border-top: 0; }
+    .target {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #fff8ec;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .summary .card strong {
+      display: block;
+      font-size: 24px;
+      margin-top: 4px;
+    }
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      background: rgba(255, 250, 241, .95);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+    .bottom-nav button {
+      min-width: 96px;
+      background: transparent;
+      color: var(--muted);
+    }
+    .bottom-nav button.active {
+      background: var(--accent);
+      color: #111;
+    }
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      background: rgba(0, 0, 0, .32);
+      padding: 14px;
+      z-index: 10;
+    }
+    .modal.open { display: flex; }
+    .sheet {
+      width: min(620px, 100%);
+      max-height: 86vh;
+      overflow: auto;
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid var(--line);
+    }
+    .hidden { display: none !important; }
+    .error {
+      padding: 12px;
+      border-radius: 8px;
+      background: #fee2e2;
+      color: var(--bad);
+      margin-bottom: 12px;
+    }
+    .ok { color: var(--good); }
+    @media (max-width: 640px) {
+      header { display: block; }
+      .form-grid, .summary { grid-template-columns: 1fr; }
+      .row { align-items: flex-start; }
+      button { padding: 9px 11px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div>
+        <h1>Workout Tracker</h1>
+        <p class="muted">Andrea</p>
+      </div>
+      <button id="refreshBtn" class="secondary">Aggiorna</button>
+    </header>
+    <div id="error" class="error hidden"></div>
+    <section id="dashboard"></section>
+    <section id="active" class="hidden"></section>
+    <section id="history" class="hidden"></section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button data-view="dashboard" class="active">Workout</button>
+    <button data-view="active">In corso</button>
+    <button data-view="history">Storico</button>
+  </nav>
+
+  <div id="modal" class="modal">
+    <div class="sheet">
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script>
+    const userId = "andrea";
+    const apiBase = `${window.location.origin}/api`;
+    const state = {
+      plans: [],
+      sessions: [],
+      activeDay: null,
+      activeExercises: [],
+      startedAt: null,
+      view: "dashboard"
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const errorBox = $("#error");
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.classList.toggle("hidden", !message);
+    }
+
+    async function request(path, options = {}) {
+      const res = await fetch(`${apiBase}${path}`, {
+        headers: { "Content-Type": "application/json" },
+        ...options
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || `Errore ${res.status}`);
+      }
+      return res.json();
+    }
+
+    function target(ex) {
+      if (!ex || ex.reps <= 0) return ex.notes || "10 min";
+      return `${ex.sets}x${ex.rep_range || ex.reps}`;
+    }
+
+    function formatDate(iso) {
+      return new Date(iso).toLocaleDateString("it-IT", { day: "2-digit", month: "short", year: "numeric" });
+    }
+
+    function formatTime(iso) {
+      return new Date(iso).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    async function loadData() {
+      showError("");
+      try {
+        state.plans = await request(`/workout-plans?user_id=${userId}`);
+        state.sessions = await request(`/workout-sessions?user_id=${userId}`);
+        render();
+      } catch (err) {
+        showError("Non riesco a caricare i dati. " + err.message);
+      }
+    }
+
+    function switchView(view) {
+      state.view = view;
+      ["dashboard", "active", "history"].forEach((id) => $(`#${id}`).classList.toggle("hidden", id !== view));
+      document.querySelectorAll(".bottom-nav button").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.view === view);
+      });
+      render();
+    }
+
+    function render() {
+      renderDashboard();
+      renderActive();
+      renderHistory();
+    }
+
+    function renderDashboard() {
+      const root = $("#dashboard");
+      const cards = state.plans.map((plan) => `
+        <article class="card">
+          <div class="day-head">
+            <div>
+              <h2>${plan.name}</h2>
+              <p class="muted">${plan.exercises.length} esercizi</p>
+            </div>
+            <button onclick="startWorkout(${plan.day_number})">Start</button>
+          </div>
+          <div>
+            ${plan.exercises.map((ex) => `
+              <div class="exercise">
+                <div class="row">
+                  <div>
+                    <strong>${ex.name}</strong>
+                    <div class="target">
+                      <span>${target(ex)}</span>
+                      <span>${ex.rest_time || ""}</span>
+                      <span>${ex.current_load || "0"} kg</span>
+                    </div>
+                  </div>
+                  <button class="secondary" onclick="editExercise(${plan.day_number}, '${ex.id}')">Modifica</button>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </article>
+      `).join("");
+      root.innerHTML = `<div class="grid days">${cards || "<p>Nessun workout disponibile.</p>"}</div>`;
+    }
+
+    function renderActive() {
+      const root = $("#active");
+      if (!state.activeDay) {
+        root.innerHTML = `<div class="card"><h2>Nessun workout in corso</h2><p class="muted">Scegli un Day dalla schermata Workout.</p></div>`;
+        return;
+      }
+      const elapsed = state.startedAt ? Math.max(1, Math.round((Date.now() - state.startedAt) / 60000)) : 1;
+      root.innerHTML = `
+        <div class="card">
+          <div class="day-head">
+            <div>
+              <h2>${state.activeDay.name}</h2>
+              <p class="muted">${elapsed} minuti</p>
+            </div>
+            <button onclick="finishWorkout()">Salva</button>
+          </div>
+          ${state.activeExercises.map((ex, index) => `
+            <div class="exercise">
+              <strong>${ex.name}</strong>
+              <div class="target">
+                <span>${target(ex)}</span>
+                <span>${ex.rest_time || ""}</span>
+              </div>
+              <div class="form-grid">
+                <label>Serie<input type="number" min="0" value="${ex.sets}" onchange="updateActive(${index}, 'sets', this.value)"></label>
+                <label>Ripetizioni<input type="number" min="0" value="${ex.reps}" onchange="updateActive(${index}, 'reps', this.value)"></label>
+                <label>Carico<input value="${ex.load}" onchange="updateActive(${index}, 'load', this.value)"></label>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderHistory() {
+      const root = $("#history");
+      if (!state.sessions.length) {
+        root.innerHTML = `<div class="card"><h2>Storico workout</h2><p class="muted">Nessun allenamento salvato.</p></div>`;
+        return;
+      }
+      root.innerHTML = `
+        <h2>Storico workout</h2>
+        <div class="grid">
+          ${state.sessions.map((session) => {
+            const volume = session.report?.total_volume || 0;
+            return `
+              <article class="card">
+                <div class="row">
+                  <div>
+                    <h3>${session.day_name}</h3>
+                    <p class="muted">${formatDate(session.completed_at)} · ${formatTime(session.completed_at)}</p>
+                  </div>
+                  <button class="secondary" onclick="showSession('${session.id}')">Apri</button>
+                </div>
+                <div class="summary">
+                  <div class="card"><span class="muted">Durata</span><strong>${session.duration_minutes} min</strong></div>
+                  <div class="card"><span class="muted">Volume</span><strong>${volume} kg</strong></div>
+                </div>
+              </article>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    function startWorkout(dayNumber) {
+      const plan = state.plans.find((item) => item.day_number === dayNumber);
+      state.activeDay = plan;
+      state.startedAt = Date.now();
+      state.activeExercises = plan.exercises.map((ex) => ({
+        exercise_id: ex.id,
+        name: ex.name,
+        sets: ex.sets,
+        reps: ex.reps,
+        rep_range: ex.rep_range || "",
+        load: ex.current_load || "0",
+        muscle_group: ex.muscle_group || "other",
+        muscle_label: ex.muscle_label || "Other",
+        completed: true,
+        was_modified: false,
+        original_name: ex.name
+      }));
+      switchView("active");
+    }
+
+    function updateActive(index, field, value) {
+      const numeric = field === "sets" || field === "reps";
+      state.activeExercises[index][field] = numeric ? Number(value) : value;
+    }
+
+    async function finishWorkout() {
+      if (!state.activeDay) return;
+      const duration = Math.max(1, Math.round((Date.now() - state.startedAt) / 60000));
+      try {
+        await request(`/workout-sessions?user_id=${userId}`, {
+          method: "POST",
+          body: JSON.stringify({
+            day_number: state.activeDay.day_number,
+            day_name: state.activeDay.name,
+            duration_minutes: duration,
+            exercises: state.activeExercises
+          })
+        });
+        state.activeDay = null;
+        state.activeExercises = [];
+        await loadData();
+        switchView("history");
+      } catch (err) {
+        showError("Salvataggio non riuscito. " + err.message);
+      }
+    }
+
+    function editExercise(dayNumber, exerciseId) {
+      const plan = state.plans.find((item) => item.day_number === dayNumber);
+      const ex = plan.exercises.find((item) => item.id === exerciseId);
+      $("#modalContent").innerHTML = `
+        <h2>Modifica esercizio</h2>
+        <label>Nome<input id="editName" value="${ex.name}"></label>
+        <div class="form-grid">
+          <label>Serie<input id="editSets" type="number" value="${ex.sets}"></label>
+          <label>Ripetizioni<input id="editReps" type="number" value="${ex.reps}"></label>
+          <label>Range<input id="editRange" value="${ex.rep_range || ""}"></label>
+        </div>
+        <div class="form-grid">
+          <label>Carico<input id="editLoad" value="${ex.current_load || "0"}"></label>
+          <label>Muscolo<input id="editMuscle" value="${ex.muscle_group || ""}"></label>
+          <label>Etichetta<input id="editLabel" value="${ex.muscle_label || ""}"></label>
+        </div>
+        <div class="row">
+          <button onclick="saveExercise(${dayNumber}, '${exerciseId}')">Salva</button>
+          <button class="secondary" onclick="closeModal()">Annulla</button>
+        </div>
+      `;
+      $("#modal").classList.add("open");
+    }
+
+    async function saveExercise(dayNumber, exerciseId) {
+      try {
+        await request(`/workout-plans/${dayNumber}/exercises/${exerciseId}?user_id=${userId}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            name: $("#editName").value,
+            sets: Number($("#editSets").value),
+            reps: Number($("#editReps").value),
+            rep_range: $("#editRange").value,
+            current_load: $("#editLoad").value,
+            muscle_group: $("#editMuscle").value,
+            muscle_label: $("#editLabel").value
+          })
+        });
+        closeModal();
+        await loadData();
+      } catch (err) {
+        showError("Modifica non riuscita. " + err.message);
+      }
+    }
+
+    function showSession(id) {
+      const session = state.sessions.find((item) => item.id === id);
+      const changes = session.report?.load_changes || [];
+      $("#modalContent").innerHTML = `
+        <h2>${session.day_name}</h2>
+        <p class="muted">${formatDate(session.completed_at)} · ${formatTime(session.completed_at)}</p>
+        <div class="summary">
+          <div class="card"><span class="muted">Durata</span><strong>${session.duration_minutes} min</strong></div>
+          <div class="card"><span class="muted">Volume totale</span><strong>${session.report?.total_volume || 0} kg</strong></div>
+        </div>
+        <h3>Esercizi eseguiti</h3>
+        ${session.exercises.map((ex) => `
+          <div class="exercise">
+            <strong>${ex.name}</strong>
+            <div class="target">
+              <span>${ex.sets}x${ex.rep_range || ex.reps}</span>
+              <span>${ex.load} kg</span>
+            </div>
+          </div>
+        `).join("")}
+        <h3>Variazioni percentuali</h3>
+        ${changes.length ? changes.map((item) => `
+          <p class="${item.change_pct >= 0 ? "ok" : ""}">${item.exercise_name}: ${item.change_pct > 0 ? "+" : ""}${item.change_pct}%</p>
+        `).join("") : `<p class="muted">Nessuna variazione.</p>`}
+        <h3>Modifiche effettuate</h3>
+        ${session.exercises.filter((ex) => ex.was_modified).length ? session.exercises.filter((ex) => ex.was_modified).map((ex) => `
+          <p>${ex.original_name || ex.name} → ${ex.name}</p>
+        `).join("") : `<p class="muted">Nessuna modifica.</p>`}
+        <button class="secondary" onclick="closeModal()">Chiudi</button>
+      `;
+      $("#modal").classList.add("open");
+    }
+
+    function closeModal() {
+      $("#modal").classList.remove("open");
+    }
+
+    document.querySelectorAll(".bottom-nav button").forEach((btn) => {
+      btn.addEventListener("click", () => switchView(btn.dataset.view));
+    });
+    $("#refreshBtn").addEventListener("click", loadData);
+    $("#modal").addEventListener("click", (event) => {
+      if (event.target.id === "modal") closeModal();
+    });
+
+    loadData();
+  </script>
+</body>
+</html>
